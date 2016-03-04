@@ -9,8 +9,8 @@
                 <div class="panel-heading">Assignment</div>
                 <div class="panel-body">
 
-                    <form class="form-horizontal" role="form" method="POST" 
-                    action="{{ url('/assignment') }}">
+                    <form class="form-horizontal" role="form" method="" 
+                    action="">
                         {!! csrf_field() !!}
                         <h1> Assignment Page</h1>
                         @foreach ( $name as $button )

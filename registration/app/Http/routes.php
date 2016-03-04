@@ -1,4 +1,15 @@
 <?php
+/**
+* File Doc Comment
+*
+* PHP version 5
+*
+* @category PHP
+* @package  PHP_CodeSniffer
+* @author   Mindfire Solutions <pallabi.biswal@mindfiresolutions.com>
+* @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+* @link     http://www.mindfiresolutions.com
+*/
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -96,12 +107,6 @@ Route::group(['middleware' => ['web']], function () {
 
 		//assign role to user
 		Route::post('/assignrole','AclController@postAssignRole');
-
-		//assign role to resource
-		Route::post('/assignresource','AclController@postAssignResource');
-
-		//assign role to operations
-		Route::post('/assignoperation','AclController@postAssignOperation');
 
 		//loads privilege table
 		Route::get('/postprivilege','AclController@postPrivilege');

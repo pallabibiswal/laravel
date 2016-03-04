@@ -36,7 +36,7 @@ $(document).ready(function () {
 				{ name: "ostate",width:200,editable:true},
 				{ name: "ophone",width:200,editable:true},
 				{ name: "extra",width:200,editable:true},
-				{ name: "activate",width:50,editable:true,edittype:'checkbox'},
+				{ name: "activate",width:50,editable:false,edittype:'checkbox'},
 				{ name: "username",width:80,editable:true},
 				{ name: "tweet",width:100,editable:true,formatter: 'showlink', 
 					formatoptions: { 

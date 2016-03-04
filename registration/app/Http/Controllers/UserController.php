@@ -1,5 +1,15 @@
 <?php
-
+/**
+* File Doc Comment
+*
+* PHP version 5
+*
+* @category PHP
+* @package  PHP_CodeSniffer
+* @author   Mindfire Solutions <pallabi.biswal@mindfiresolutions.com>
+* @license  http://www.gnu.org/copyleft/gpl.html GNU General Public License
+* @link     http://www.mindfiresolutions.com
+*/
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -25,50 +35,59 @@ class UserController extends Controller
      * Create a method to get profile view.
      *
      * @param  object $request
+     * @return view profile/login
      */
     public function getProfile(Request $request)
     {
         
-      if(Auth::check()) {
+        if(Auth::check()) {
+
+            //displaying information of authenticated user
             $user = new User;
             $data = Auth::user();
-             return response()->view('profile',compact('data'));
-         } else {
+            
+            return response()->view('profile',compact('data'));
+        
+        } else {
             \Session::flash('status', 'Please login!');
             return redirect('login');
-         }
-       
+        }
     }
 
      /**
      * Create a method to get update view
      *
      * @param  object $request
+     * @return view update/login
      */
     public function getUpdate(Request $request)
-    {
-        
-      if(Auth::check()) {
+    {    
+        if(Auth::check()) {
+
+            //displaying information of authenticated user
             $user = new User;
             $data = Auth::user();
             return response()->view('update',compact('data'));
-         } else {
+        
+        } else {
             \Session::flash('status', 'Please login!');
             return redirect('login');
-         }   
+        }   
     }
     
      /**
      * Create a method to update data
      *
      * @param  object $request
+     * @return view profile/login
      */
     public function postUpdate(Request $request)
     {
 
-      if(Auth::check()) {             
-           $value = Auth::user()->value('id');
-           
+        if(Auth::check()) {             
+           $value = Auth::user()->id;
+
+            //validating updated data
             $this->validate($request, [
              'first'   => 'bail|required|max:30|min:3|alpha',
              'last'    => 'bail|required|max:30|min:3|alpha',
@@ -89,45 +108,48 @@ class UserController extends Controller
              'photo'   => 'image',
             ]);
             
-          if ($request->file('photo')) {
-            $image_temp_name = $request->file('photo')->getPathname();
-            $image_name =$request->file('photo')->getClientOriginalName();
-            $path = base_path() . '/public/profilepic/'; 
-            $request->file('photo')->move($path , $image_name);
-          } else {
-           $image_name = DB::table('users')->where('id', $value)->value('photo');
-          }     
+            //uploading updated profile picture
+            if ($request->file('photo')) {
+                $image_temp_name = $request->file('photo')->getPathname();
+                $image_name =$request->file('photo')->getClientOriginalName();
+                $path = base_path() . '/public/profilepic/'; 
+                $request->file('photo')->move($path , $image_name);
+            } else {
+                $image_name = DB::table('users')->where('id', $value)->value('photo');
+            }     
 
-          //validating updated data
-           $data = DB::table('users')
-           	->where('id', $value)
-           	->update(['first'       => $request->input('first'),
-                     'last'        => $request->input('last'),
-                     'middle'      => $request->input('middle'),
-                     'suffix'      => $request->input('suffix'),   
-                     'employement' => $request->input('employement'),
-                     'employer'    => $request->input('employer'),
-                     'dob'         => $request->input('dob'),
-                     'gender'      => $request->input('gender'),
-                     'status'      => $request->input('status'),
-                     'rstreet'     => $request->input('rstreet'),
-                     'rcity'       => $request->input('rcity'),
-                     'rstate'      => $request->input('rstate'),
-                     'rphone'      => $request->input('rphone'),
-                     'ostreet'     => $request->input('ostreet'),
-                     'ocity'       => $request->input('ocity'),
-                     'ostate'      => $request->input('ostate'),
-                     'ophone'      => $request->input('ophone'),
-                     'photo'       => $image_name,
-                     'username'    => $request->input('username'),
-                     'tweet'       => $request->input('tweet'),
-                     'extra'       => $request->input('extra')
-            ]);
-            $data = DB::table('users')->where('id', $value)->first();
+            $data['first']      = $request->input('first');
+            $data['last']       = $request->input('last');
+            $data['middle']     = $request->input('middle');
+            $data['suffix']     = $request->input('suffix');
+            $data['employement']= $request->input('employement');
+            $data['employer']   = $request->input('employer');
+            $data['dob']        = $request->input('dob');
+            $data['email']      = $request->input('email');
+            $data['gender']     = $request->input('gender');
+            $data['status']     = $request->input('status');
+            $data['rstreet']    = $request->input('rstreet');
+            $data['rcity']      = $request->input('rcity');
+            $data['rstate']     = $request->input('rstate');
+            $data['rphone']     = $request->input('rphone');
+            $data['ostreet']    = $request->input('ostreet');
+            $data['ocity']      = $request->input('ocity');
+            $data['ostate']     = $request->input('ostate');
+            $data['ophone']     = $request->input('ophone');
+            $data['photo']      = $image_name;
+            $data['username']   = $request->input('username');
+            $data['tweet']      = $request->input('tweet');   
+            $data['extra']      = $request->input('extra');
+            
+            //calling method to update user informations
+            $user = new User;
+            $user->updateUserData($data,$value);
+            
+            $data = User::where('id', $value)->first();
             return view('profile',compact('data'));
-      } else {
-	        \Session::flash('status', 'Please login!');
-	        return redirect('login');
+        } else {
+            \Session::flash('status', 'Please login!');
+            return redirect('login');
         }  
     }
     
