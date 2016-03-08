@@ -59,11 +59,24 @@ Route::group(['middleware' => ['web']], function () {
 	});
 
 	//verify user email id
-	Route::get('verify/{data}','Auth\RegistrationController@confirm');
+	Route::get('verify/{data}/confirm/{key}','Auth\RegistrationController@confirm');
 
 	//loads assignment page
 	Route::get('assignment','AclController@getAssignment');
-	
+
+	//loads QR code generator 
+	Route::get('qrcode', function () {
+    	if(Auth::check()) {
+    		return view('qrcode');
+    	} 
+    	return view('auth/login');
+	});
+
+	//generate QR code 
+	Route::post('generate', 'QrCodeController@makeQrCode');
+	Route::get('generate', function() {
+		return view('auth/login');
+	});
 	/*
 	|--------------------------------------------------------------------------
 	| Application Routes

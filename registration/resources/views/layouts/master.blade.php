@@ -69,7 +69,8 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/profile') }}">profile</a></li>
                                 <li><a href="{{ url('/update') }}">Update</a></li>
-                                 <li><a href="{{ url('/assignment') }}">Assignment</a></li>
+                                <li><a href="{{ url('/assignment') }}">Assignment</a></li>
+                                <li><a href="{{ url('/qrcode') }}">GENERATE QR CODE</a></li>
                                 @if ( Auth::user()->isAdmin() )
                                 <li><a href="{{ url('/add') }}">ADD</a></li>
                                 <li><a href="{{ url('/assign') }}">ASSIGN</a></li>
@@ -96,5 +97,6 @@
 </div>
  <script type='text/javascript' src='/js/grid.js'></script>
  <script type='text/javascript' src='/js/privilege.js'></script>
+  <script type='text/javascript' src='/js/qrcode.js'></script>
 </body>
 </html>

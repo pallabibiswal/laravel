@@ -9,7 +9,7 @@
         <div>
             Thanks for creating an account with the verification .
             Please follow the link below to verify your email address
-            {{ URL::to('verify/'.$id) }}<br/>
+            {{ URL::to('verify/'.$id.'/confirm/'.$key) }}<br/>
 
         </div>
 

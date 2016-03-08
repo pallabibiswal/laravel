@@ -37,27 +37,27 @@ class RegistrationController extends Controller
    {
         
         // validating user data
-        $this->validate($request, [
-            'first'   => 'bail|required|max:30|min:3|alpha',
-            'last'    => 'bail|required|max:30|min:3|alpha',
-            'middle'  => 'bail|max:30|min:3|alpha',
-            'suffix'  => 'bail|max:30|min:3|alpha',
-            'employer'=> 'bail|max:30|min:3|alpha',
-            'dob'     => 'bail|required|date',
-            'email'   => 'bail|required|email|unique:users,email',
-            'rstreet' => 'bail|required|max:30|min:3',
-            'rcity'   => 'bail|required|max:30|min:3|alpha',
-            'rstate'  => 'bail|required|max:30|min:3|alpha',
-            'rphone'  => 'bail|required|numeric',
-            'ostreet' => 'bail|required|max:30|min:3',
-            'ocity'   => 'bail|required|max:30|min:3|alpha',
-            'ostate'  => 'bail|required|max:30|min:3|alpha',
-            'ophone'  => 'bail|required|numeric',
-            'password'=> 'bail|required|max:30|min:6',
-            'username'=> 'bail|required|unique:users,username',
-            'repassword' => 'bail|required|same:password',
-            'photo'   => 'image',
-         ]);
+        // $this->validate($request, [
+        //     'first'   => 'bail|required|max:30|min:3|alpha',
+        //     'last'    => 'bail|required|max:30|min:3|alpha',
+        //     'middle'  => 'bail|max:30|min:3|alpha',
+        //     'suffix'  => 'bail|max:30|min:3|alpha',
+        //     'employer'=> 'bail|max:30|min:3|alpha',
+        //     'dob'     => 'bail|required|date',
+        //     'email'   => 'bail|required|email|unique:users,email',
+        //     'rstreet' => 'bail|required|max:30|min:3',
+        //     'rcity'   => 'bail|required|max:30|min:3|alpha',
+        //     'rstate'  => 'bail|required|max:30|min:3|alpha',
+        //     'rphone'  => 'bail|required|numeric',
+        //     'ostreet' => 'bail|required|max:30|min:3',
+        //     'ocity'   => 'bail|required|max:30|min:3|alpha',
+        //     'ostate'  => 'bail|required|max:30|min:3|alpha',
+        //     'ophone'  => 'bail|required|numeric',
+        //     'password'=> 'bail|required|max:30|min:6',
+        //     'username'=> 'bail|required|unique:users,username',
+        //     'repassword' => 'bail|required|same:password',
+        //     'photo'   => 'image',
+        //  ]);
         
         //storing user information in an array
         $data['first']      = $request->input('first');
@@ -104,6 +104,7 @@ class RegistrationController extends Controller
 
         $data = [
            'id' => $value,
+           'key'=> str_random(30),
         ];
 
         //sending confirmation email
@@ -122,7 +123,7 @@ class RegistrationController extends Controller
     * @param  $id
     *@return view login
     */
-    public function confirm($id) {
+    public function confirm($id,$key) {
     
         if( ! $id) {
             return redirect('register');
@@ -130,6 +131,7 @@ class RegistrationController extends Controller
         //activating registered user
         $user = User::find($id);
         $user->activate = 1;
+        $user->key = $key;
         $user->save();
 
        \Session::flash('status','You have successfully verified your account.');
