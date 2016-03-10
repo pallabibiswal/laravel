@@ -6,6 +6,18 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Aloha\\Twilio\\Commands\\TwilioCallCommand' => $vendorDir . '/aloha/twilio/src/Commands/TwilioCallCommand.php',
+    'Aloha\\Twilio\\Commands\\TwilioSmsCommand' => $vendorDir . '/aloha/twilio/src/Commands/TwilioSmsCommand.php',
+    'Aloha\\Twilio\\Dummy' => $vendorDir . '/aloha/twilio/src/Dummy.php',
+    'Aloha\\Twilio\\LoggingDecorator' => $vendorDir . '/aloha/twilio/src/LoggingDecorator.php',
+    'Aloha\\Twilio\\Manager' => $vendorDir . '/aloha/twilio/src/Manager.php',
+    'Aloha\\Twilio\\Support\\Laravel\\Facade' => $vendorDir . '/aloha/twilio/src/Support/Laravel/Facade.php',
+    'Aloha\\Twilio\\Support\\Laravel\\L4ServiceProvider' => $vendorDir . '/aloha/twilio/src/Support/Laravel/L4ServiceProvider.php',
+    'Aloha\\Twilio\\Support\\Laravel\\L5ServiceProvider' => $vendorDir . '/aloha/twilio/src/Support/Laravel/L5ServiceProvider.php',
+    'Aloha\\Twilio\\Support\\Laravel\\ServiceProvider' => $vendorDir . '/aloha/twilio/src/Support/Laravel/ServiceProvider.php',
+    'Aloha\\Twilio\\Support\\Laravel\\ServiceProviderTrait' => $vendorDir . '/aloha/twilio/src/Support/Laravel/ServiceProviderTrait.php',
+    'Aloha\\Twilio\\Twilio' => $vendorDir . '/aloha/twilio/src/Twilio.php',
+    'Aloha\\Twilio\\TwilioInterface' => $vendorDir . '/aloha/twilio/src/TwilioInterface.php',
     'App\\Console\\Commands\\Inspire' => $baseDir . '/app/Console/Commands/Inspire.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Events\\Event' => $baseDir . '/app/Events/Event.php',
@@ -16,6 +28,7 @@ return array(
     'App\\Http\\Controllers\\Auth\\RegistrationController' => $baseDir . '/app/Http/Controllers/Auth/RegistrationController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
+    'App\\Http\\Controllers\\QrCodeController' => $baseDir . '/app/Http/Controllers/QrCodeController.php',
     'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Admin' => $baseDir . '/app/Http/Middleware/Admin.php',

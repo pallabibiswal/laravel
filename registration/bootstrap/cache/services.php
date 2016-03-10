@@ -28,6 +28,7 @@
     24 => 'App\\Providers\\RouteServiceProvider',
     25 => 'Thujohn\\Twitter\\TwitterServiceProvider',
     26 => 'SimpleSoftwareIO\\QrCode\\QrCodeServiceProvider',
+    27 => 'Aloha\\Twilio\\Support\\Laravel\\ServiceProvider',
   ),
   'eager' => 
   array (
@@ -45,6 +46,7 @@
     11 => 'App\\Providers\\EventServiceProvider',
     12 => 'App\\Providers\\RouteServiceProvider',
     13 => 'Thujohn\\Twitter\\TwitterServiceProvider',
+    14 => 'Aloha\\Twilio\\Support\\Laravel\\ServiceProvider',
   ),
   'deferred' => 
   array (

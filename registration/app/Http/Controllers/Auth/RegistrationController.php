@@ -22,6 +22,7 @@ use Auth;
 use Session;
 use Mail;
 use DB;
+use Twilio;
 use Redirect;
 use Illuminate\Support\Facades\Input;
 
@@ -37,27 +38,27 @@ class RegistrationController extends Controller
    {
         
         // validating user data
-        // $this->validate($request, [
-        //     'first'   => 'bail|required|max:30|min:3|alpha',
-        //     'last'    => 'bail|required|max:30|min:3|alpha',
-        //     'middle'  => 'bail|max:30|min:3|alpha',
-        //     'suffix'  => 'bail|max:30|min:3|alpha',
-        //     'employer'=> 'bail|max:30|min:3|alpha',
-        //     'dob'     => 'bail|required|date',
-        //     'email'   => 'bail|required|email|unique:users,email',
-        //     'rstreet' => 'bail|required|max:30|min:3',
-        //     'rcity'   => 'bail|required|max:30|min:3|alpha',
-        //     'rstate'  => 'bail|required|max:30|min:3|alpha',
-        //     'rphone'  => 'bail|required|numeric',
-        //     'ostreet' => 'bail|required|max:30|min:3',
-        //     'ocity'   => 'bail|required|max:30|min:3|alpha',
-        //     'ostate'  => 'bail|required|max:30|min:3|alpha',
-        //     'ophone'  => 'bail|required|numeric',
-        //     'password'=> 'bail|required|max:30|min:6',
-        //     'username'=> 'bail|required|unique:users,username',
-        //     'repassword' => 'bail|required|same:password',
-        //     'photo'   => 'image',
-        //  ]);
+        $this->validate($request, [
+            'first'   => 'bail|required|max:30|min:3|alpha',
+            'last'    => 'bail|required|max:30|min:3|alpha',
+            'middle'  => 'bail|max:30|min:3|alpha',
+            'suffix'  => 'bail|max:30|min:3|alpha',
+            'employer'=> 'bail|max:30|min:3|alpha',
+            'dob'     => 'bail|required|date',
+            'email'   => 'bail|required|email|unique:users,email',
+            'rstreet' => 'bail|required|max:30|min:3',
+            'rcity'   => 'bail|required|max:30|min:3|alpha',
+            'rstate'  => 'bail|required|max:30|min:3|alpha',
+            'rphone'  => 'bail|required|numeric',
+            'ostreet' => 'bail|required|max:30|min:3',
+            'ocity'   => 'bail|required|max:30|min:3|alpha',
+            'ostate'  => 'bail|required|max:30|min:3|alpha',
+            'ophone'  => 'bail|required|numeric',
+            'password'=> 'bail|required|max:30|min:6',
+            'username'=> 'bail|required|unique:users,username',
+            'repassword' => 'bail|required|same:password',
+            'photo'   => 'image',
+         ]);
         
         //storing user information in an array
         $data['first']      = $request->input('first');
@@ -112,6 +113,11 @@ class RegistrationController extends Controller
             $message->from('pallabi4321@gmail.com', 'Verify your email');
             $message->to(Input::get('email'))->subject('verify email to activate account');
         });
+
+        //sending sms to check email
+        Twilio::message('+91'.$request->input('rphone'), 
+                    'Please check your email<'.$request->input('email').
+                    '> to activate your account!');
 
         \Session::flash('status', 'Please check your email to activate your account!');
         return redirect('login');
