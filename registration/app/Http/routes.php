@@ -37,20 +37,8 @@ Route::group(['middleware' => ['web']], function () {
     	} 
     	return view('auth/login');	
 	});	
-	
-	//check user registered or not
-	Route::post('/login', 'Auth\AuthController@postLogin'); 
 
-	//loads profile page of logged in user 
-    Route::get('/profile', 'UserController@getProfile');
-
-    //loads update page 
-    Route::get('/update', 'UserController@getUpdate');
-
-    //post updated data
-    Route::post('/edit', 'UserController@postUpdate');
-
-    //loads home page
+	//loads home page
 	Route::get('/home', 'HomeController@index');
 	
 	//loads welcome page
@@ -61,77 +49,92 @@ Route::group(['middleware' => ['web']], function () {
 	//verify user email id
 	Route::get('/verify/{data}/confirm/{key}','Auth\RegistrationController@confirm');
 
-	//loads assignment page
-	Route::get('assignment','AclController@getAssignment');
+	//check user registered or not
+	Route::post('/login', 'Auth\AuthController@postLogin'); 
 
-	//loads QR code generator 
-	Route::get('qrcode', function () {
-    	if(Auth::check()) {
-    		return view('qrcode');
-    	} 
-    	return view('auth/login');
-	});
+	Route::group(['middleware' => ['auth']], function () {
+	
+		//loads profile page of logged in user 
+	    Route::get('/profile', 'UserController@getProfile');
 
-	//generate QR code 
-	Route::post('generate', 'QrCodeController@makeQrCode');
-	Route::get('generate', function() {
-		return view('auth/login');
-	});
+	    //loads update page 
+	    Route::get('/update', 'UserController@getUpdate');
 
-	//loads view to select locations
-	Route::get('mapsearch','MapController@getMapSearch');
+	    //post updated data
+	    Route::post('/edit', 'UserController@postUpdate');
 
-	//loads map with selected location
-	Route::post('searched','MapController@postSearch');
-	/*
-	|--------------------------------------------------------------------------
-	| Application Routes
-	|--------------------------------------------------------------------------
-	|
-	| This route group applies the "admin" middleware group to every route
-	| it contains where only admin can access these routes.
-	|
-	*/
-	Route::group(['middleware' => ['admin']], function () {
+		//loads assignment page
+		Route::get('assignment','AclController@getAssignment');
 
-		//loads grid page
-		Route::get('/grid','AclController@grid');
+		//loads QR code generator 
+		Route::get('qrcode', function () {
+	    	// if(Auth::check()) {
+	    		return view('qrcode');
+	    	// } 
+	    	// return view('auth/login');
+		});
 
-		//loads add page
-		Route::get('/add','AclController@getAdd');
+		//generate QR code 
+		Route::post('generate', 'QrCodeController@makeQrCode');
+		Route::get('generate', function() {
+			return view('auth/login');
+		});
 
-		//get data and display in grid
-		Route::post('/grid', 'AclController@viewGrid');
+		//loads view to select locations
+		Route::get('mapsearch','MapController@getMapSearch');
 
-		//get tweeted data
-		Route::get('/tweetsearch', 'AclController@getTweet');
+		//loads map with selected location
+		Route::post('searched','MapController@postSearch');
+		/*
+		|--------------------------------------------------------------------------
+		| Application Routes
+		|--------------------------------------------------------------------------
+		|
+		| This route group applies the "admin" middleware group to every route
+		| it contains where only admin can access these routes.
+		|
+		*/
+		Route::group(['middleware' => ['admin']], function () {
 
-		//edit or delete grid
-		Route::post('/updategrid', 'AclController@updateGrid');
+			//loads grid page
+			Route::get('/grid','AclController@grid');
 
-		//loads assign page
-		Route::get('/assign','AclController@getAssign');
+			//loads add page
+			Route::get('/add','AclController@getAdd');
 
-		//loads privilege page
-		Route::get('/privilege','AclController@getPrivilege');
+			//get data and display in grid
+			Route::post('/grid', 'AclController@viewGrid');
 
-		//add new role
-		Route::post('/postrole','AclController@postRole');
+			//get tweeted data
+			Route::get('/tweetsearch', 'AclController@getTweet');
 
-		//add new resource
-		Route::post('/postresource','AclController@postResource');
+			//edit or delete grid
+			Route::post('/updategrid', 'AclController@updateGrid');
 
-		//add new operation
-		Route::post('/postoperation','AclController@postOperation');
+			//loads assign page
+			Route::get('/assign','AclController@getAssign');
 
-		//assign role to user
-		Route::post('/assignrole','AclController@postAssignRole');
+			//loads privilege page
+			Route::get('/privilege','AclController@getPrivilege');
 
-		//loads privilege table
-		Route::get('/postprivilege','AclController@postPrivilege');
+			//add new role
+			Route::post('/postrole','AclController@postRole');
 
-		//post edited privileges
-		Route::post('/editprivilege','AclController@editPrivilege');
+			//add new resource
+			Route::post('/postresource','AclController@postResource');
+
+			//add new operation
+			Route::post('/postoperation','AclController@postOperation');
+
+			//assign role to user
+			Route::post('/assignrole','AclController@postAssignRole');
+
+			//loads privilege table
+			Route::get('/postprivilege','AclController@postPrivilege');
+
+			//post edited privileges
+			Route::post('/editprivilege','AclController@editPrivilege');
+		});		
 	});
 });
 

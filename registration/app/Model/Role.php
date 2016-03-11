@@ -24,9 +24,9 @@ class Role extends Model
  */
     public function addRole($data)
     {
-	 	$role = new Role;
-	 	$role->role = $data['role'];
-	 	$role->save();
+	 	//adding roles in role table
+	 	$this->role = $data['role'];
+	 	$this->save();
     }	   
 
 }

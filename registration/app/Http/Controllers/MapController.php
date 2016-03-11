@@ -14,11 +14,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
-
 use App\User;
-
 use Auth;
 
 class MapController extends Controller
@@ -27,38 +24,28 @@ class MapController extends Controller
     /**
 	* Create a method to get view to search a location
 	*
-	*@return view searched/login
+	*@return view searched
 	*/
 	public function getMapSearch()
-	{
-		if(Auth::check()) {
+	{	
+		$id = Auth::user()->id;
+		$user = new User;
 
-			$id = Auth::user()->id;
-			$user = new User;
-
-			//to fetch user address
-			$data = $user->getAllAddress($id);
-			return view('mapsearch', compact('data'));  	    
-        } else {
-            \Session::flash('status', 'Please login!');
-            return redirect('login');
-        } 	
+		//to fetch user address
+		$data = $user->getAllAddress($id);
+		return view('mapsearch', compact('data'));  	       	
 	}	   
-	 /**
+	 
+	/**
 	* Create a method to get the map
 	*
 	*@param object request
-	*@return view searched/login
+	*@return view searched
 	*/
 	public function postSearch(Request $request)
-	{
-		if(Auth::check()) {
-			//fetch requested address
-			$address['location'] = $request->input('address');
-			return view('searched',compact('address'));	    
-        } else {
-            \Session::flash('status', 'Please login!');
-            return redirect('login');
-        } 	
+	{	
+		//fetch requested address
+		$address['location'] = $request->input('address');
+		return view('searched',compact('address'));	    
 	}	     
 }

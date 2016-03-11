@@ -18,21 +18,19 @@ $(document).ready(function () {
 
 
 function editPrivilege(result,role_id,resource_id,operation_id)
-{ 
-    $(document).ready(function () {  
-        $.ajax({
-            method: 'POST',
-            url: 'editprivilege',
-            dataType: 'json',
-            data: {
-            result:result,
-            role_id: role_id,
-            resource_id: resource_id,
-            operation_id: operation_id
-            },
-            success: function(response){
+{  
+    $.ajax({
+        method: 'POST',
+        url: 'editprivilege',
+        dataType: 'json',
+        data: {
+        result:result,
+        role_id: role_id,
+        resource_id: resource_id,
+        operation_id: operation_id
+        },
+        success: function(response){
 
-            }
-        }); 
+        }
     }); 
 }
