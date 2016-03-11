@@ -388,8 +388,7 @@
                             </div>
                             <div class="col-md-9">  
                             <textarea class="form-control" 
-                            rows="5" id="extra" name="extra" 
-                            value="{{ old('extra') }}">
+                            rows="5" id="extra" name="extra">
                             </textarea>
                             </div>
                         </div>

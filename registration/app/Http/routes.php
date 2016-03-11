@@ -59,7 +59,7 @@ Route::group(['middleware' => ['web']], function () {
 	});
 
 	//verify user email id
-	Route::get('verify/{data}/confirm/{key}','Auth\RegistrationController@confirm');
+	Route::get('/verify/{data}/confirm/{key}','Auth\RegistrationController@confirm');
 
 	//loads assignment page
 	Route::get('assignment','AclController@getAssignment');
@@ -77,6 +77,12 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('generate', function() {
 		return view('auth/login');
 	});
+
+	//loads view to select locations
+	Route::get('mapsearch','MapController@getMapSearch');
+
+	//loads map with selected location
+	Route::post('searched','MapController@postSearch');
 	/*
 	|--------------------------------------------------------------------------
 	| Application Routes

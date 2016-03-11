@@ -7,7 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Privilege</div>
             <div class="panel-body">
-			<form class="form-horizontal" method="POST" action="/postprivilege">
+            <form class="form-horizontal" method="POST" action="/postprivilege">
             {!! csrf_field() !!}
                 <div class="form-group col-md-3">
                     <label><h5>Select Role:</h5></label>
@@ -22,16 +22,20 @@
                     @endforeach
                 </select>
                 </div>
-            </form>	
-			</div>
-		</div>
-    	</div><br/><br/>
+            </form> 
+            </div>
+        </div>
+        </div><br/><br/>
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div id="display"></div>
             </div>
         </div>
-	</div>
+    </div>
 </div>
 
+@endsection
+
+@section('footer')
+<script type='text/javascript' src="{{ asset_timed('/js/privilege.js') }}"></script>
 @endsection

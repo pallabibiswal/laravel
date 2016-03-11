@@ -28,6 +28,7 @@ use DB;
 use Session;
 use Redirect;
 use Twitter;
+use App\Http\Requests\UserDataRequest;
 
 class UserController extends Controller
 {
@@ -81,65 +82,34 @@ class UserController extends Controller
      * @param  object $request
      * @return view profile/login
      */
-    public function postUpdate(Request $request)
+    public function postUpdate(UserDataRequest $request)
     {
 
         if(Auth::check()) {             
            $value = Auth::user()->id;
 
-            //validating updated data
+            // validating email and username
             $this->validate($request, [
-             'first'   => 'bail|required|max:30|min:3|alpha',
-             'last'    => 'bail|required|max:30|min:3|alpha',
-             'middle'  => 'bail|max:30|min:3|alpha',
-             'suffix'  => 'bail|max:30|min:3|alpha',
-             'employer'=> 'bail|max:30|min:3|alpha',
-             'dob'     => 'bail|required|date',
-             'email'   => 'bail|required|email|',
-             'rstreet' => 'bail|required|max:30|min:3',
-             'rcity'   => 'bail|required|max:30|min:3|alpha',
-             'rstate'  => 'bail|required|max:30|min:3|alpha',
-             'rphone'  => 'bail|required|numeric',
-             'ostreet' => 'bail|required|max:30|min:3',
-             'ocity'   => 'bail|required|max:30|min:3|alpha',
-             'ostate'  => 'bail|required|max:30|min:3|alpha',
-             'ophone'  => 'bail|required|numeric',
-             'username'=> 'bail|required',
-             'photo'   => 'image',
+            'email'   => 'bail|required|email|unique:users,email,'.$value,
+            'username'=> 'bail|required|unique:users,username,'.$value,
             ]);
-            
-            //uploading updated profile picture
+
+            //storing all request in an array
+            $data = $request->all();
+
+             //uploading updated profile picture
             if ($request->file('photo')) {
                 $image_temp_name = $request->file('photo')->getPathname();
                 $image_name =$request->file('photo')->getClientOriginalName();
+                $image_name .= $data['username'];
                 $path = base_path() . '/public/profilepic/'; 
                 $request->file('photo')->move($path , $image_name);
             } else {
                 $image_name = DB::table('users')->where('id', $value)->value('photo');
             }     
 
-            $data['first']      = $request->input('first');
-            $data['last']       = $request->input('last');
-            $data['middle']     = $request->input('middle');
-            $data['suffix']     = $request->input('suffix');
-            $data['employement']= $request->input('employement');
-            $data['employer']   = $request->input('employer');
-            $data['dob']        = $request->input('dob');
-            $data['email']      = $request->input('email');
-            $data['gender']     = $request->input('gender');
-            $data['status']     = $request->input('status');
-            $data['rstreet']    = $request->input('rstreet');
-            $data['rcity']      = $request->input('rcity');
-            $data['rstate']     = $request->input('rstate');
-            $data['rphone']     = $request->input('rphone');
-            $data['ostreet']    = $request->input('ostreet');
-            $data['ocity']      = $request->input('ocity');
-            $data['ostate']     = $request->input('ostate');
-            $data['ophone']     = $request->input('ophone');
-            $data['photo']      = $image_name;
-            $data['username']   = $request->input('username');
-            $data['tweet']      = $request->input('tweet');   
-            $data['extra']      = $request->input('extra');
+            //storing unique image name to array
+            $data['photo'] = $image_name;
             
             //calling method to update user informations
             $user = new User;

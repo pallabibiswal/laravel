@@ -12,10 +12,11 @@
 */
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserDataRequest;
 use App\User;
 use Hash;
 use Auth;
@@ -24,7 +25,6 @@ use Mail;
 use DB;
 use Twilio;
 use Redirect;
-use Illuminate\Support\Facades\Input;
 
 class RegistrationController extends Controller
 {
@@ -34,61 +34,28 @@ class RegistrationController extends Controller
  * @param  Request  $request
  * @return view login
  */
-   public function registrationPost(Request $request) 
+   public function registrationPost(UserDataRequest $request) 
    {
         
         // validating user data
         $this->validate($request, [
-            'first'   => 'bail|required|max:30|min:3|alpha',
-            'last'    => 'bail|required|max:30|min:3|alpha',
-            'middle'  => 'bail|max:30|min:3|alpha',
-            'suffix'  => 'bail|max:30|min:3|alpha',
-            'employer'=> 'bail|max:30|min:3|alpha',
-            'dob'     => 'bail|required|date',
             'email'   => 'bail|required|email|unique:users,email',
-            'rstreet' => 'bail|required|max:30|min:3',
-            'rcity'   => 'bail|required|max:30|min:3|alpha',
-            'rstate'  => 'bail|required|max:30|min:3|alpha',
-            'rphone'  => 'bail|required|numeric',
-            'ostreet' => 'bail|required|max:30|min:3',
-            'ocity'   => 'bail|required|max:30|min:3|alpha',
-            'ostate'  => 'bail|required|max:30|min:3|alpha',
-            'ophone'  => 'bail|required|numeric',
             'password'=> 'bail|required|max:30|min:6',
             'username'=> 'bail|required|unique:users,username',
             'repassword' => 'bail|required|same:password',
-            'photo'   => 'image',
          ]);
         
         //storing user information in an array
-        $data['first']      = $request->input('first');
-        $data['last']       = $request->input('last');
-        $data['middle']     = $request->input('middle');
-        $data['suffix']     = $request->input('suffix');
-        $data['employement']= $request->input('employement');
-        $data['employer']   = $request->input('employer');
-        $data['dob']        = $request->input('dob');
-        $data['email']      = $request->input('email');
-        $data['gender']     = $request->input('gender');
-        $data['status']     = $request->input('status');
-        $data['rstreet']    = $request->input('rstreet');
-        $data['rcity']      = $request->input('rcity');
-        $data['rstate']     = $request->input('rstate');
-        $data['rphone']     = $request->input('rphone');
-        $data['ostreet']    = $request->input('ostreet');
-        $data['ocity']      = $request->input('ocity');
-        $data['ostate']     = $request->input('ostate');
-        $data['ophone']     = $request->input('ophone');
-        $data['password']   = bcrypt($request->input('password'));
-        $data['username']   = $request->input('username');
-        $data['repassword'] = $request->input('repassword');
-        $data['tweet']      = $request->input('tweet');   
-        $data['extra']      = $request->input('extra');
+        $data = $request->all();
+
+        //storing password in encrypted format 
+        $data['password'] = bcrypt($request->input('password'));
 
         //upload files
         if ($request->file('photo')) {
             $image_temp_name = $request->file('photo')->getPathname();
-            $image_name =$request->file('photo')->getClientOriginalName();
+            $image_name = $request->file('photo')->getClientOriginalName();
+            $image_name .= $data['username'];
             $path = base_path() . '/public/profilepic/'; 
             $request->file('photo')->move($path , $image_name);
             $data['photo'] =  $image_name;
@@ -98,25 +65,24 @@ class RegistrationController extends Controller
         
         //calling method to save user information
         $user = new User;          
-        $user->registeredData($data);
-       
-        //fetching user id 
-        $value = DB::table('users')->where('email', Input::get('email'))->value('id');
+        $value = $user->registeredData($data);
 
         $data = [
-           'id' => $value,
-           'key'=> str_random(30),
+           'id'   => $value,
+           'key'  => str_random(30),
+           'name' => $request->input('first'),
         ];
 
         //sending confirmation email
-        Mail::send('verify', $data, function ($message) {
+        Mail::send('auth/emails/verify', $data, function ($message) {
             $message->from('pallabi4321@gmail.com', 'Verify your email');
             $message->to(Input::get('email'))->subject('verify email to activate account');
         });
 
         //sending sms to check email
         Twilio::message('+91'.$request->input('rphone'), 
-                    'Please check your email<'.$request->input('email').
+                    'Hello '.$request->input('first').
+                    ' Please check your email<'.$request->input('email').
                     '> to activate your account!');
 
         \Session::flash('status', 'Please check your email to activate your account!');
@@ -127,7 +93,7 @@ class RegistrationController extends Controller
     * method to activate a user after verification.
     *
     * @param  $id
-    *@return view login
+    * @return view login
     */
     public function confirm($id,$key) {
     
