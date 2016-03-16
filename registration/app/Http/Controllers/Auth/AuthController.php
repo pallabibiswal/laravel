@@ -100,12 +100,16 @@ class AuthController extends Controller
         $user = new User;
         $email = $request->input('email');
         $password = $request->input('password');
+
+        //validating email and password
         $this->validate($request, [
         'email'    => 'bail|required|email',
         'password' => 'bail|required|min:6',
         ]);
 
-        if (Auth::attempt(['email' => $email, 'password' => $password, 'activate' => 1])) {
+        //checking credentials
+        if (Auth::attempt([
+            'email' => $email, 'password' => $password, 'activate' => 1])) {
             $data = DB::table('users')->where('email', $email)->first();
             return response()->view('profile',compact('data'));
         } else {

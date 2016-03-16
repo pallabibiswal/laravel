@@ -4,6 +4,7 @@
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <title>Search Location</title>
+        
         <!--css file-->
         <link href="{{ asset_timed('/css/map.css') }}" rel="stylesheet">
         </head>

@@ -8,6 +8,8 @@
                 <div class="panel-body">
                 <div id="print-content">
                     <div class="row" >
+
+                    <!--product details-->
                         <div class="col-md-12">
                             <div>
                                 <label>Product Name: </label>
