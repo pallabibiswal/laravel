@@ -43,7 +43,7 @@ class RegistrationController extends Controller
             'password'=> 'bail|required|max:30|min:6',
             'username'=> 'bail|required|unique:users,username',
             'repassword' => 'bail|required|same:password',
-         ]);
+        ]);
         
         //storing user information in an array
         $data = $request->all();
