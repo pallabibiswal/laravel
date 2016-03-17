@@ -13,6 +13,9 @@
 
     <!-- Styles -->
     <link href="{{ asset_timed('/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset_timed('/css/hotel_search.css') }}" rel="stylesheet">
+
+    @yield('css')
 
     <!--scripts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -23,6 +26,9 @@
             }  
         });
     </script>
+
+    @yield('script')
+
 </head>
 <body id="app-layout">
     <nav class="navbar navbar-default">
@@ -61,3 +67,7 @@
     
 </body>
 </html>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

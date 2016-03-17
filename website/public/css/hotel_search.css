@@ -1,0 +1,43 @@
+.date{
+border-left-style: solid;
+border-left-width: 15px;
+}
+.hotel-list{
+    width: 600px;
+    padding: 5px;
+    border: 1px solid #DCDCDC;
+    border-bottom-style: 10px double #DCDCDC;
+}
+#image{
+    height: auto;
+    width:100%;
+}
+.hotel-detail{
+    width: 400px;
+    padding: 5px;
+    border: 1px solid #DCDCDC;  
+}
+.hotel-name{
+    font-family: "Times New Roman", Times, serif;
+    font-style: normal;
+    font-size: 20px;
+    font-weight: bold;
+}
+#stars{
+    font-size: 5px;
+}
+.price-details{
+    width: 100px;
+    padding: 5px;
+    border: 1px solid #DCDCDC; 
+}
+.price{
+    padding-top: 10px;
+    font-size: 20px;
+    color: green;
+}
+.all-details{
+    width: 800px;
+    padding: 5px;
+    border: 1px solid #DCDCDC; 
+}
