@@ -85,6 +85,7 @@
 <div class="col-md-7 col-md-offset-3 all-details">
 <div class="col-md-3" id="sort">
 <select class="form-control" name="sort" id="sortname">
+    <option value="">Sort Details by</option>
     <option value="price">Focus on Price</option>
     <option value="starrating">Focus on Star Rating</option>
     <option value="guestrating">Sort by Popularity</option>
@@ -126,6 +127,7 @@
 <script>
 $(document).ready(function() {
 $('#sortname').on('change', function() {
+
     var city     = $('.search').val();
     var checkin  = $('#checkin').val();
     var checkout = $('#checkout').val();
@@ -143,13 +145,10 @@ $('#sortname').on('change', function() {
         },
         success: function(data){
             var json = $.parseJSON(data);
+
             for(var i=0;i<json.length;i++){
 
-                console.log(json[i].name);
-                console.log(json[i].price);
-                console.log(json[i].address);
                 console.log(json[i].ratings);
-                console.log(json[i].photo);
                 $('.hotel-name').each(function(i) {
                     $(this).html(json[i].name);
                 });
