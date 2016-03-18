@@ -60,6 +60,11 @@
             </div>
         </div>
     </nav>
+    @if (session('status'))
+    <div class="alert alert-success">
+        <center>{{ session('status') }}</center>
+    </div>
+    @endif
 
     @yield('content')
 

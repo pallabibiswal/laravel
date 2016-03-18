@@ -8,7 +8,7 @@ border-left-width: 15px;
     border: 1px solid #DCDCDC;
     border-bottom-style: 10px double #DCDCDC;
 }
-#image{
+.image{
     height: auto;
     width:100%;
 }
@@ -38,6 +38,12 @@ border-left-width: 15px;
 }
 .all-details{
     width: 800px;
+    height: auto;
     padding: 5px;
+    padding-top: 10px;
     border: 1px solid #DCDCDC; 
+}
+#sort{
+    float: right;
+    padding-bottom: 10px;
 }
