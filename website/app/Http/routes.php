@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -26,4 +25,7 @@ Route::group(['middleware' => 'web'], function () {
 
     //get sorted hotel details
     Route::get('sort', 'SearchController@sortedHotelDetail');
+
+    //get latitude and longitude to display hotels in map
+    Route::get('map', 'SearchController@latLngHotels');
 });
