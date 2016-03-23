@@ -41,7 +41,9 @@ $('#sortname').on('change', function() {
                 divContent += '<div class="col-md-6 hotel-detail">';
                 divContent += '<div class="hotel-name">'+json[i].name+'</div>';
                 if ( json[i].ratings !== undefined ) {
-                divContent += '<div id="stars"><input id="input-id" type="text" class="rating" value="'+json[i].ratings+'"></div>';
+                // divContent += '<div id="stars"><input id="input-id" type="text" class="rating" value="'+json[i].ratings+'"></div>';
+                      // $("#input-id").rating();
+                   
                 }
                 divContent += '<div class="hotel-address">'+json[i].address+'</div> ';
                 
