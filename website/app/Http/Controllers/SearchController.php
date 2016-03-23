@@ -187,6 +187,24 @@ class SearchController extends Controller
         $dat[$i]['lat']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Latitude'];    
         $dat[$i]['lng']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Longitude'];
         $dat[$i]['name'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['Name'];
+        $dat[$i]['address']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['StreetAddress'];
+        $dat[$i]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['City'];
+        $dat[$i]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['Province'];
+        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'])){
+        $dat[$i]['ratings']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'];
+        }
+        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'])){
+        $dat[$i]['price']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'];
+        }
+        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'])) {
+        $dat[$i]['guestratings'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'];
+        }
+        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
+        $dat[$i]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
+        }
+        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
+        $dat[$i]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
+        } 
         }  
         $center['lat'] = $lanlog['lat'];
         $center['lng'] = $lanlog['lng'];
