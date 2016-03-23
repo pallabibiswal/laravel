@@ -1,83 +1,23 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
 <link href="/css/star-rating.css" media="all" rel="stylesheet" type="text/css" />
-<link href="/css/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/ui-darkness/jquery-ui.css" />
+<link href="/css/theme-krajee-svg.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('script')
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
-<script src="/js/star-rating.js" type="text/javascript"></script>
-<script src="/js/star-rating_locale_LANG.js"></script>
 <script src="/js/hotel-search.js"></script>
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDDG_qAbS4Ni9qSUtFrdq35VnKLc6GWZN8" type="text/javascript"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"  type="text/javascript"></script>
-
-<script>
-function hotelMap(data) {
-    var map;
-    var coords = new Object();
-    var markersArray = [];
-    coords.lat = data.center.lat;
-    coords.lng = data.center.lng;
-
-    var beaches = [];
-    for(i=0;i<data.latlng.length;i++ ){
-        console.log(data.latlng[i].lat);
-        innerArr = [data.latlng[i].name,data.latlng[i].lat,data.latlng[i].lng];
-        beaches.push(innerArr);
-    }
-
-    $(document).ready(function() 
-    {
-        
-        $( "#map_container" ).dialog({
-            autoOpen:false,
-            width: 555,
-            height: 400,
-            resizeStop: function(event, ui) {google.maps.event.trigger(map, 'resize')  },
-            open: function(event, ui) {google.maps.event.trigger(map, 'resize'); }      
-        });  
-
-        $( "#showMap" ).click(function() {           
-            $( "#map_container" ).dialog( "open" );
-            map.setCenter(new google.maps.LatLng(coords.lat, coords.lng), 10);
-            return false;
-        });    
-        // $(  "input:submit,input:button, a, button", "#controls" ).button();
-        initialize();
-        plotPoint(beaches);
-    });
-    function plotPoint(beaches)
-    {
-          for (var i = 0; i < beaches.length; i++) {
-          var beach = beaches[i];
-          var marker = new google.maps.Marker({
-            position: {lat: Number(beach[1]), lng: Number(beach[2])},
-            map: map,
-            title: beach[0]         
-          });
-        }
-        markersArray.push(marker);                                         
-    }
-    function initialize() 
-    {      
-    
-        var latlng = new google.maps.LatLng(coords.lat, coords.lng);
-        var myOptions = {
-          zoom: 10,
-          center: latlng,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-       map = new google.maps.Map(document.getElementById("map_canvas"),  myOptions);                         
-    }   
-}     
-</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+<script src="/js/star-rating.js" type="text/javascript"></script>
+<script src="/js/star-rating_locale_LANG.js"></script>
+<script src="/js/map-search.js"></script>
 
 @endsection
 
@@ -177,12 +117,12 @@ function hotelMap(data) {
         
             <div class="col-md-6 hotel-detail">             
                 <div class="hotel-name">{{ $data[$i]['name'] }}</div>
-                @if(isset($data[$i]['ratings']))
+                
                 <div id="stars">
-                <input id="input-id" type="number" class="rating" 
-                value="{{$data[$i]['ratings']}}">
+                <input id="input-id" type="number" class="rating" readonly="false"
+                value="@if(isset($data[$i]['ratings'])){{$data[$i]['ratings']}}@endif">
                 </div>
-                @endif
+                
                 <div class="hotel-address">{{ $data[$i]['address'] }}</div> 
                 
                 @if(isset($data[$i]['guestratings']))
@@ -217,27 +157,5 @@ function hotelMap(data) {
 
 </div>
 @endif
-<script>
-$('#showMap').on('click', function () {
-    var city     = $('.search').val();
-    var checkin  = $('#checkin').val();
-    var checkout = $('#checkout').val();
-    var sort     = $('#sortname').val();
-    $.ajax({
-        type: "get",
-        url: "map",
-        dataType: "json",
-        data: {
-            city:city,
-            checkin: checkin,
-            checkout: checkout,
-            sort: sort
-        },
-        success: function(data){ 
-            hotelMap(data);
-        }
-    });
-});
-       
-</script>
+
 @endsection
