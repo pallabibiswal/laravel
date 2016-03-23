@@ -24,6 +24,7 @@ border-left-width: 15px;
     font-weight: bold;
 }
 #stars{
+    padding-top: 5px;
     font-size: 5px;
 }
 .price-details{
@@ -77,16 +78,37 @@ border-left-width: 15px;
     font-size: 15px;
 }
 #map{
-    width: 500px;
+    width: 800px;
     height: 100%;
 }
 #map_canvas{
     width: 100%;
     height: 100%;
 }
-.gBubble
-{
-    color:black;
-    font-family:Tahoma, Geneva, sans-serif;
-    font-size:12px;    
+.iw-title{
+    font-weight: bold;
+    font-size: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+.iw-emo-sm,
+.iw-emo-gr,
+.iw-emo-sad{
+    width: 10%;
+    height: auto;
+}
+.iw-address{
+    padding-top: 5px;
+    font-family: "Times New Roman", Times, serif;  
+}
+.iw-image{
+    padding-top:5px;
+    height: auto;
+    width:100%;
+    padding-left: 50px;
+}
+.tit-border{
+    width: 480px;
+    padding: 5px;
+    border: 1px solid #DCDCDC;
+    background-color: #DEF5FF;   
 }
