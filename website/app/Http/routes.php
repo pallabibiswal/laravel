@@ -16,16 +16,16 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/home', 'HomeController@index');
 
     //loads search page
-    Route::get('/', function () {
+    Route::get('search', function () {
     return view('search');
 	});
-
+    
 	//get hotel details
     Route::post('search', 'SearchController@hotelDetail');
 
     //get sorted hotel details
     Route::get('sort', 'SearchController@sortedHotelDetail');
 
-    //get latitude and longitude to display hotels in map
-    Route::get('map', 'SearchController@latLngHotels');
+    //filter hotels by top ratings
+    Route::get('smile','SearchController@topFilters');   
 });
