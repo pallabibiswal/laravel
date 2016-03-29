@@ -42,5 +42,24 @@ function get_latlng($address)
     $latLng = $response['results'][0]['geometry']['location'];
     return $latLng;
 }
+/**
+ * Create a method to get url contents
+ *
+ *@param $url
+ *@return array $jsonData
+ */
+function getUrlContent($url)
+{
+    //get hotel details from expedia API
+    $curlSession = curl_init();
+    curl_setopt($curlSession, CURLOPT_URL, $url);
+    curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
+    curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+
+    //decode the json data
+    $jsonData = json_decode(curl_exec($curlSession),true);
+
+    return $jsonData;
+}
 
 ?>
