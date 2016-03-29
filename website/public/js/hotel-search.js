@@ -1,5 +1,5 @@
 $(function() {
-    $( ".date" ).datepicker();
+    $(".date").datepicker();
 });
 
 $(document).ready(function() {
@@ -22,7 +22,6 @@ $('#sortname').on('change', function() {
         sort: sort
         },
         success: function(json){
-            // var json = $.parseJSON(data);
             $('.loading').hide();
             $('.hotel-list').animate({opacity:1});
 
@@ -64,12 +63,21 @@ $('#sortname').on('change', function() {
                     divContent += '</div>'; 
                 }
                 divContent += '</div>';
-                if (json[i].price !== undefined) {
                 divContent += '<div class="col-md-3 price-details">';
+                divContent += '<div><center>Expedia</center></div>';
+                if (json[i].price !== undefined) {
                 divContent += '<div class="price"><label>$'+json[i].price+'</label></div>';
-                divContent += '</div>';
                 }
+                divContent += '<div class="deal-fit">';
+                if (json[i].detailsurl !== undefined) {
+                divContent += '<input type="hidden" id="url"';
+                divContent += 'value="'+json[i].detailsurl+'">';
+                }
+                divContent += '<button class="btn btn-success deal" onclick="myFunction();">View Deal';
+                divContent += '<span class="glyphicon glyphicon-chevron-right">';
+                divContent += '</span></button></div>';
                 divContent += '</div></div>';
+                divContent += '</div>';
 
                 $( "#parentdiv" ).append(divContent);
             } 
@@ -77,3 +85,7 @@ $('#sortname').on('change', function() {
     });
 }); 
 });
+function myFunction() {
+    var data = $("#url").val();
+    var myWindow = window.open(data, "expedia", "width=600, height=500");
+}
