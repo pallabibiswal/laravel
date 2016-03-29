@@ -31,12 +31,13 @@ border-left-width: 15px;
     width: 100px;
     padding: 5px;
     border: 1px solid #DCDCDC; 
+    padding-left: 5px;
+    height: 150px;
 }
 .price{
     padding-top: 10px;
     font-size: 20px;
     color: green;
-    height: 100px;
     text-align: center;
 }
 .all-details{
@@ -111,4 +112,46 @@ border-left-width: 15px;
     padding: 5px;
     border: 1px solid #DCDCDC;
     background-color: #DEF5FF;   
+}
+.deal{
+    width: 150px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+.glyphicon-chevron-right{
+    padding-left: 20px;
+}
+.deal-fit{
+    padding-top: 45px;
+}
+.iw-price{
+    font-weight: bold;
+    font-style: italic;
+    padding-right: 10px;
+}
+.iw-deal{
+    border-top: 10px;
+}
+.filters{
+    width: 300px;
+    height: 700px;
+    padding: 5px;
+    padding-top: 10px;
+    border: 1px solid #DCDCDC;  
+}
+.ft-ratings{
+    padding-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+#dvMap{
+    height: 380px; 
+    width: 580px;
+}
+#dialog{
+    display: none;
+}
+#error{
+    color: red;
+    display: none;
 }
