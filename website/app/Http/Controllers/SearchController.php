@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Session;
+use Carbon\Carbon;
+use View;
+use Redirect;
 
 class SearchController extends Controller
 {
@@ -43,23 +46,24 @@ class SearchController extends Controller
             return redirect('/');
         }
 
-        //get hotel details from expedia API
-        $curlSession = curl_init();
-        curl_setopt($curlSession, CURLOPT_URL, 'http://terminal2.expedia.com/x/hotels?location='
+        //called a method to get url contents
+        $jsonData = getUrlContent('http://terminal2.expedia.com/x/hotels?location='
             .$lanlog['lat'].','.$lanlog['lng'].'&checkInDate='.$detail['checkin'].
             '&checkOutDate='.$detail['checkout'].
             '&radius=5km&apikey=6z3rxiRROPeMug17Ll2eVLX2m6DGtlkc');
-        curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
-        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-
-        //decode the json data
-        $jsonData = json_decode(curl_exec($curlSession),true);
         
         //store total no. of hotels
         $total['count'] = $jsonData['HotelCount'];
 
+        //to display according to the date picker format
+        $detail['checkin']  = $request->input('checkin');
+        $detail['checkout'] = $request->input('checkout');
+
+
         //store required details into an array
         for ($i=0; $i < $total['count']; $i++ ) {
+            $data[$i]['lat']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Latitude'];    
+            $data[$i]['lng']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Longitude'];
         
             if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
             $data[$i]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
@@ -81,13 +85,13 @@ class SearchController extends Controller
             if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
             $data[$i]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
             }
-        
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
+            $data[$i]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
+            }
         }
-        
-        curl_close($curlSession);
-      
+
         //return array to search view to display data
-        return view('search',compact('data','total','detail'));
+        return view('search',compact('data','total','detail','lanlog'));
     }
 
     /**
@@ -107,17 +111,11 @@ class SearchController extends Controller
         $detail['checkout']  = date("Y-m-d", strtotime($request->input('checkout')));
         $detail['sort']      = $request->input('sort');
         
-        //get hotel details from expedia API
-        $curlSession = curl_init();
-        curl_setopt($curlSession, CURLOPT_URL, 'http://terminal2.expedia.com/x/hotels?location='
+        //called a method to get url contents
+        $jsonData = getUrlContent('http://terminal2.expedia.com/x/hotels?location='
             .$lanlog['lat'].','.$lanlog['lng'].'&checkInDate='.$detail['checkin'].
             '&checkOutDate='.$detail['checkout'].
             '&radius=5km&sort='.$detail['sort'].'&apikey=6z3rxiRROPeMug17Ll2eVLX2m6DGtlkc');
-        curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
-        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-
-        //decode the json data
-        $jsonData = json_decode(curl_exec($curlSession),true);
 
         //store total no. of hotels
         $total['count'] = $jsonData['HotelCount'];
@@ -143,80 +141,136 @@ class SearchController extends Controller
             if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
             $dat[$i]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
             }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
+            $dat[$i]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
+            }
         }        
-        curl_close($curlSession);  
+          
         $data = json_encode($dat);
         echo $data;
-     
     }
-     /**
-     * Create a method to get latitude and longitude hotel 
+    /**
+     * Create a method to get hotels after top filters
      *
      * @param object $request
-     * @return array $geocode
+     * @return array $data
      */
-    public function latLngHotels(Request $request)
+    public function topFilters(Request $request)
     {
-        
-         //call helper method to get latitude and longitude of the location
+        //call helper method to get latitude and longitude of the location
         $lanlog = get_latlng($request->input('city'));
        
         //store search location
         $detail['city']      = $request->input('city');
         $detail['checkin']   = date("Y-m-d", strtotime($request->input('checkin')));
         $detail['checkout']  = date("Y-m-d", strtotime($request->input('checkout')));
-        $detail['sort']      = $request->input('sort');
+        $filter = $request->input('filter');
         
-        //get hotel details from expedia API
-        $curlSession = curl_init();
-        curl_setopt($curlSession, CURLOPT_URL, 'http://terminal2.expedia.com/x/hotels?location='
+        //called a method to get url contents
+        $jsonData = getUrlContent('http://terminal2.expedia.com/x/hotels?location='
             .$lanlog['lat'].','.$lanlog['lng'].'&checkInDate='.$detail['checkin'].
             '&checkOutDate='.$detail['checkout'].
-            '&radius=5km&sort='.$detail['sort'].'&apikey=6z3rxiRROPeMug17Ll2eVLX2m6DGtlkc');
-        curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true);
-        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-
-        //decode the json data
-        $jsonData = json_decode(curl_exec($curlSession),true);
+            '&radius=5km&apikey=6z3rxiRROPeMug17Ll2eVLX2m6DGtlkc');
+        
 
         //store total no. of hotels
         $total['count'] = $jsonData['HotelCount'];
 
+        $j = 0;
         //store required details into an array
         for ($i=0; $i < $total['count']; $i++ ) {
-        $dat[$i]['lat']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Latitude'];    
-        $dat[$i]['lng']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Longitude'];
-        $dat[$i]['name'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['Name'];
-        $dat[$i]['address']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['StreetAddress'];
-        $dat[$i]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['City'];
-        $dat[$i]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['Province'];
-        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'])){
-        $dat[$i]['ratings']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'];
-        }
-        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'])){
-        $dat[$i]['price']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'];
-        }
         if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'])) {
-        $dat[$i]['guestratings'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'];
+        if($filter === 'sm') {
+        if ($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'] >= 4) {
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
+            $dat[$j]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
+            }   
+            $dat[$j]['name']     = $jsonData['HotelInfoList']['HotelInfo'][$i]['Name'];
+            $dat[$j]['address']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['StreetAddress'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['City'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['Province'];
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'])){
+            $dat[$j]['ratings']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'])){
+            $dat[$j]['price']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'])) {
+            $dat[$j]['guestratings'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
+            $dat[$j]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
+            $dat[$j]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
+            }
+            $j++;
         }
-        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
-        $dat[$i]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
-        }
-        if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
-        $dat[$i]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
         } 
-        }  
-        $center['lat'] = $lanlog['lat'];
-        $center['lng'] = $lanlog['lng'];
-        curl_close($curlSession); 
-        
-        $both = array();
-        
-        $both['latlng'] = $dat;
-        $both['center'] = $center;
-        
-        $data = json_encode($both);
-        echo $data;  
+        if($filter === 'gr') {
+        if ($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'] < 4
+            && $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'] >= 2) {
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
+            $dat[$j]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
+            }   
+            $dat[$j]['name']     = $jsonData['HotelInfoList']['HotelInfo'][$i]['Name'];
+            $dat[$j]['address']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['StreetAddress'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['City'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['Province'];
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'])){
+            $dat[$j]['ratings']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'])){
+            $dat[$j]['price']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'])) {
+            $dat[$j]['guestratings'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
+            $dat[$j]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
+            $dat[$j]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
+            }
+            $j++;
+        } 
+        }
+        if($filter === 'sad') {
+        if ($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'] < 2) {
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'])) {
+            $dat[$j]['photo'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['ThumbnailUrl'];
+            }   
+            $dat[$j]['name']     = $jsonData['HotelInfoList']['HotelInfo'][$i]['Name'];
+            $dat[$j]['address']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['StreetAddress'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['City'];
+            $dat[$j]['address'] .= ','.$jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['Province'];
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'])){
+            $dat[$j]['ratings']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['StarRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'])){
+            $dat[$j]['price']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Price']['TotalRate']['Value'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'])) {
+            $dat[$j]['guestratings'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestRating'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'])) {
+            $dat[$j]['guestreviewcount'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['GuestReviewCount'];
+            }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
+            $dat[$j]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
+            }
+            $j++;
+        } 
+        }
+        }
+        }
+        if (isset($dat)) {       
+            $data = json_encode($dat);
+        } else {
+            $err['result'] = 'no'; 
+            $data = json_encode($err);
+        }
+        echo $data;       
     }
 }
 
