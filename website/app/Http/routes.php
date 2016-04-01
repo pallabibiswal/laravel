@@ -24,8 +24,5 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('search', 'SearchController@hotelDetail');
 
     //get sorted hotel details
-    Route::get('sort', 'SearchController@sortedHotelDetail');
-
-    //filter hotels by top ratings
-    Route::get('smile','SearchController@topFilters');   
+    Route::get('sort', 'SearchController@sortedHotelDetail'); 
 });
