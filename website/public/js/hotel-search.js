@@ -1,9 +1,23 @@
+//jquery for date picker plug in
 $(function() {
     $(".date").datepicker();
 });
 
 $(document).ready(function() {
+
+//ajax call for sorting hotels on change event
 $('#sortname').on('change', function() {
+
+    //reset other filter options
+    $("#hotel-name").val('');
+    $("#star1").removeClass("highlight");
+    $("#star2").removeClass("highlight");
+    $("#star3").removeClass("highlight");
+    $("#star4").removeClass("highlight");
+    $("#star5").removeClass("highlight");
+    $("#smile4").removeClass("highlight");
+    $("#sad0").removeClass("highlight");
+    $("#granny2").removeClass("highlight");
     $('.hotel-list').animate({opacity:0});
     $('.loading').show();
     var city     = $('.search').val();
@@ -26,6 +40,8 @@ $('#sortname').on('change', function() {
             $('.hotel-list').animate({opacity:1});
 
             $(".hotel-list").hide();
+
+            //generating string to populate with sorted hotel details
             for(var i=0;i<json.length;i++){
 
                 var divContent = '<div class="col-md-12 hotel-list">';
@@ -40,9 +56,54 @@ $('#sortname').on('change', function() {
                 divContent += '<div class="col-md-6 hotel-detail">';
                 divContent += '<div class="hotel-name">'+json[i].name+'</div>';
                 if ( json[i].ratings !== undefined ) {
-                // divContent += '<div id="stars"><input id="input-id" type="text" class="rating" value="'+json[i].ratings+'"></div>';
-                      // $("#input-id").rating();
-                   
+                
+                divContent += '<div id="stars">';
+                    if (json[i].ratings > 0
+                            && json[i].ratings <= 1) {
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (json[i].ratings > 1
+                            && json[i].ratings <= 2) {
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (json[i].ratings > 2
+                            && json[i].ratings <= 3) {
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (json[i].ratings > 3
+                            && json[i].ratings <= 4) {
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (json[i].ratings > 4
+                            && json[i].ratings <= 5) {
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    divContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    divContent += '</div>';
                 }
                 divContent += '<div class="hotel-address">'+json[i].address+'</div> ';
                 
@@ -68,14 +129,13 @@ $('#sortname').on('change', function() {
                 if (json[i].price !== undefined) {
                 divContent += '<div class="price"><label>$'+json[i].price+'</label></div>';
                 }
-                divContent += '<div class="deal-fit">';
                 if (json[i].detailsurl !== undefined) {
-                divContent += '<input type="hidden" id="url"';
-                divContent += 'value="'+json[i].detailsurl+'">';
-                }
-                divContent += '<button class="btn btn-success deal" onclick="myFunction();">View Deal';
+                divContent += '<div class="deal-fit">';
+                divContent += '<button class="btn btn-success deal"'+ 
+                              'onclick="myFunction(\''+json[i].detailsurl+'\');">View Deal';
                 divContent += '<span class="glyphicon glyphicon-chevron-right">';
                 divContent += '</span></button></div>';
+                }
                 divContent += '</div></div>';
                 divContent += '</div>';
 
@@ -85,7 +145,8 @@ $('#sortname').on('change', function() {
     });
 }); 
 });
-function myFunction() {
-    var data = $("#url").val();
+
+//function to open expedia website 
+function myFunction(data) {
     var myWindow = window.open(data, "expedia", "width=600, height=500");
 }

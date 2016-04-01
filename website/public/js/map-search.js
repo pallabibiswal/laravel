@@ -1,3 +1,4 @@
+//function to display hotels in map
 function hotelMap(lat,lng,data) {
     
     var map;
@@ -10,6 +11,7 @@ function hotelMap(lat,lng,data) {
         hotels.push(innerArr);
     }
 
+    //jquery dialog to display hotels in map
     $("#dialog").dialog({
         modal: true,
         title: "Google Map",
@@ -76,10 +78,53 @@ function createMarker(map,latlng, name, address, ratings, guestratings, photo, r
                 '<div class="tit-border"><div class="iw-title">' +name+'</div></div>'+ 
                 '<div class="col-md-6 ">';
                 if(ratings !== undefined) {
-                  iwContent += '<div id="stars">'+
-                            '<input id="input-id" type="number"'+
-                            'class="rating" readonly="false"'+
-                            'value="'+ratings+'"></div>';
+                    iwContent += '<div id="stars">';
+                    if (ratings  > 0
+                            && ratings  <= 1) {
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (ratings  > 1
+                            && ratings  <= 2) {
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (ratings  > 2
+                            && ratings  <= 3) {
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (ratings  > 3
+                            && ratings  <= 4) {
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    if (ratings  > 4
+                            && ratings  <= 5) {
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    iwContent += '<span ><img class="rating-stars"'+ 
+                    'src="/img/favorites-star-2.png"></span>';
+                    }
+                    iwContent += '</div>';
                   
                 }
                 iwContent += '<div class="iw-address">'+address+'</div>';
@@ -106,12 +151,12 @@ function createMarker(map,latlng, name, address, ratings, guestratings, photo, r
             iwContent += '<span class="iw-price">$ '+price+'</span>';
         }
         if (detailsurl !== undefined) {
-            iwContent += '<input type="hidden" id="url"';
-            iwContent += 'value="'+detailsurl+'">';
-        }
-        iwContent += '<button class="btn btn-success deal" onclick="myFunction();">View Deal';
+        console.log(detailsurl);
+        iwContent += '<button class="btn btn-success deal"';
+        iwContent += 'onclick="myFunction(\''+detailsurl+'\');">View Deal';
         iwContent += '<span class="glyphicon glyphicon-chevron-right">';
-        iwContent += '</span></button></div>';            
+        iwContent += '</span></button></div>';
+        }            
         iwContent += '</div>'+
                     '<div class="col-md-6">'+
                     '<img class="iw-image" src="'+photo+'">'+
