@@ -71,6 +71,14 @@ border-left-width: 15px;
     width: 10%;
     height: auto;
 }
+.ft-emo-sm,
+.ft-emo-gr,
+.ft-emo-sad{
+    width: 25px;
+    height: auto;
+    cursor:pointer;
+    margin: 0;
+}
 .guest-rating{
     font-weight: bold;
     font-size: 20px; 
@@ -154,4 +162,42 @@ border-left-width: 15px;
 #error{
     color: red;
     display: none;
+}
+.ft-wifi,
+.ft-pool,
+.ft-spa,
+.ft-beach,
+.ft-breakfast{
+    width: 10%;
+    height: auto;
+    cursor:pointer;
+}
+.ft-options{
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+#smile,
+#granny,
+#sad{
+    width: 15%;
+    height: auto;
+    display: inline;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+.highlight{
+    opacity: 0.3;
+}
+.rating-stars{
+    width: 20px;
+    height: auto; 
+}
+.ft-star{
+    width: 25px;
+    height: auto;
+    margin: 0;
+}
+#reset{
+    margin-left: 80px;
+    margin-bottom: 10px;
 }
