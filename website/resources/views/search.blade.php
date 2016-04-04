@@ -135,6 +135,7 @@
                     src="/img/favorites-star-2.png">
                     <img class="ft-star" hspace="15" 
                     src="/img/favorites-star-2.png"></button></div>
+
                 <hr/>
                 <hr/>
                     <div class="ft-ratings">Guest Ratings: </div>
