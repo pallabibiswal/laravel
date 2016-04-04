@@ -163,15 +163,6 @@ border-left-width: 15px;
     color: red;
     display: none;
 }
-.ft-wifi,
-.ft-pool,
-.ft-spa,
-.ft-beach,
-.ft-breakfast{
-    width: 10%;
-    height: auto;
-    cursor:pointer;
-}
 .ft-options{
     padding-bottom: 5px;
     font-weight: bold;
@@ -193,7 +184,7 @@ border-left-width: 15px;
     height: auto; 
 }
 .ft-star{
-    width: 25px;
+    width: 15px;
     height: auto;
     margin: 0;
 }
