@@ -1,9 +1,15 @@
 filterval = [];
+arrstar = [];
+star1 = 0;
+star2 = 0;
+star3 = 0;
+star4 = 0;
+star5 = 0;
 function filter(json) {
     
     //reset all filters   
     $("#reset").on('click', function() {
-        filterval['rating'] = undefined;
+        arrstar = [];
         filterval['guestratings'] = undefined;
         $("#hotel-name").val('');
         $("#star1").removeClass("highlight");
@@ -19,7 +25,7 @@ function filter(json) {
     
     //search for a particular hotel by its name    
     $('#search-hotel').click(function() {
-        filterval['rating'] = undefined;
+        arrstar = [];
         filterval['guestratings'] = undefined;
         $("#star1").removeClass("highlight");
         $("#star2").removeClass("highlight");
@@ -94,100 +100,289 @@ function filter(json) {
     
     //filter with star ratings
     $("#star1").click(function () {
-
-        if( $(this).val() == 1) {
-            $("#hotel-name").val('');
-            filterval['rating'] = 1;
-            $("#star1").removeClass("highlight");
-            $("#star2").addClass("highlight");
-            $("#star3").addClass("highlight");
-            $("#star4").addClass("highlight");
-            $("#star5").addClass("highlight");
-            $(".hotel-list").hide();
-            newHtml(json,'ratings',1);
+        if( star1 == 0) {
+            if( $(this).val() == 1) {
+                star1 = 1;
+                $("#hotel-name").val('');
+                arrstar.push(1);
+                $("#star1").removeClass("highlight");
+                if( $.inArray(2,arrstar) == -1 ) {
+                    $("#star2").addClass("highlight");
+                }
+                if( $.inArray(3,arrstar) == -1 ) {
+                    $("#star3").addClass("highlight");
+                }
+                if( $.inArray(4,arrstar) == -1 ) {
+                    $("#star4").addClass("highlight");
+                }
+                if( $.inArray(5,arrstar) == -1 ) {
+                    $("#star5").addClass("highlight");
+                }
+                $(".hotel-list").hide();
+                    newHtml(json,'ratings',arrstar);
+            }
+        } else {
+            star1 = 0;
+            if( $.inArray(2,arrstar) == -1
+                && $.inArray(3,arrstar) == -1
+                && $.inArray(4,arrstar) == -1
+                && $.inArray(5,arrstar) == -1) {
+                $("#star1").removeClass("highlight");
+                $("#star2").removeClass("highlight");
+                $("#star3").removeClass("highlight");
+                $("#star4").removeClass("highlight");
+                $("#star5").removeClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 1;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+                console.log(arrstar);
+            } else {
+                $("#star1").addClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 1;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            }
         }
     });
 
     //filter with star ratings
     $("#star2").click(function () {
-
-        if( $(this).val() == 2) {
-            $("#hotel-name").val('');
-            filterval['rating'] = 2;
-            $(this).removeClass("highlight");
-            $("#star1").addClass("highlight");
-            $("#star4").addClass("highlight");
-            $("#star5").addClass("highlight");
-            $("#star3").addClass("highlight");
-            $(".hotel-list").hide();
-            newHtml(json,'ratings',2);
+        if( star2 == 0) {
+            if( $(this).val() == 2) {
+                star2 = 1;
+                $("#hotel-name").val('');
+                arrstar.push(2);
+                $("#star2").removeClass("highlight");
+                if( $.inArray(1,arrstar) == -1 ) {
+                    $("#star2").addClass("highlight");
+                }
+                if( $.inArray(3,arrstar) == -1 ) {
+                    $("#star3").addClass("highlight");
+                }
+                if( $.inArray(4,arrstar) == -1 ) {
+                    $("#star4").addClass("highlight");
+                }
+                if( $.inArray(5,arrstar) == -1 ) {
+                    $("#star5").addClass("highlight");
+                }
+                $(".hotel-list").hide();
+                    newHtml(json,'ratings',arrstar);
+            }
+        } else {
+             star2 = 0;
+            if( $.inArray(1,arrstar) == -1
+                && $.inArray(3,arrstar) == -1
+                && $.inArray(4,arrstar) == -1
+                && $.inArray(5,arrstar) == -1) {
+                $("#star1").removeClass("highlight");
+                $("#star2").removeClass("highlight");
+                $("#star3").removeClass("highlight");
+                $("#star4").removeClass("highlight");
+                $("#star5").removeClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 2;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            } else {
+                $("#star2").addClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 2;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            }
         }
     });
 
     //filter with star ratings
     $("#star3").click(function () {
 
-        if( $(this).val() == 3) {
-            $("#hotel-name").val('');
-            filterval['rating'] = 3;
-            $(this).removeClass("highlight");
-            $("#star1").addClass("highlight");
-            $("#star2").addClass("highlight");
-            $("#star4").addClass("highlight");
-            $("#star5").addClass("highlight");
-            $(".hotel-list").hide();
-            newHtml(json,'ratings',3);
+        if( star3 == 0) {
+            if( $(this).val() == 3) {
+                star3 = 1;
+                $("#hotel-name").val('');
+                arrstar.push(3);
+                $("#star3").removeClass("highlight");
+                if( $.inArray(2,arrstar) == -1 ) {
+                    $("#star2").addClass("highlight");
+                }
+                if( $.inArray(1,arrstar) == -1 ) {
+                    $("#star1").addClass("highlight");
+                }
+                if( $.inArray(4,arrstar) == -1 ) {
+                    $("#star4").addClass("highlight");
+                }
+                if( $.inArray(5,arrstar) == -1 ) {
+                    $("#star5").addClass("highlight");
+                }
+                $(".hotel-list").hide();
+                    newHtml(json,'ratings',arrstar);
+            }
+        } else {
+            star3 = 0;
+            if( $.inArray(2,arrstar) == -1
+                && $.inArray(1,arrstar) == -1
+                && $.inArray(4,arrstar) == -1
+                && $.inArray(5,arrstar) == -1) {
+                $("#star1").removeClass("highlight");
+                $("#star2").removeClass("highlight");
+                $("#star3").removeClass("highlight");
+                $("#star4").removeClass("highlight");
+                $("#star5").removeClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 3;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            } else {
+                console.log('not');
+                $("#star3").addClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 3;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            }
         }
     });
 
     //filter with star ratings
     $("#star4").click(function () {
 
-        if( $(this).val() == 4) {
-            $("#hotel-name").val('');
-            filterval['rating'] = 4;
-            $(this).removeClass("highlight");
-            $("#star1").addClass("highlight");
-            $("#star2").addClass("highlight");
-            $("#star3").addClass("highlight");
-            $("#star5").addClass("highlight");
-            $(".hotel-list").hide();
-            newHtml(json,'ratings',4);
+        if( star4 == 0) {
+            if( $(this).val() == 4) {
+                star4 = 1;
+                $("#hotel-name").val('');
+                arrstar.push(4);
+                $("#star4").removeClass("highlight");
+                if( $.inArray(2,arrstar) == -1 ) {
+                    $("#star2").addClass("highlight");
+                }
+                if( $.inArray(3,arrstar) == -1 ) {
+                    $("#star3").addClass("highlight");
+                }
+                if( $.inArray(1,arrstar) == -1 ) {
+                    $("#star1").addClass("highlight");
+                }
+                if( $.inArray(5,arrstar) == -1 ) {
+                    $("#star5").addClass("highlight");
+                }
+                $(".hotel-list").hide();
+                    newHtml(json,'ratings',arrstar);
+            }
+        } else {
+            star4 = 0;
+            if( $.inArray(2,arrstar) == -1
+                && $.inArray(3,arrstar) == -1
+                && $.inArray(1,arrstar) == -1
+                && $.inArray(5,arrstar) == -1) {
+                console.log('yes');
+                $("#star1").removeClass("highlight");
+                $("#star2").removeClass("highlight");
+                $("#star3").removeClass("highlight");
+                $("#star4").removeClass("highlight");
+                $("#star5").removeClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 4;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            } else {
+                $("#star4").addClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 4;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar); 
+            }
         }
     });
 
     //filter with star ratings
     $("#star5").click(function () {
 
-        if( $(this).val() == 5) {
-            $("#hotel-name").val('');
-            filterval['rating'] = 5;
-            $(this).removeClass("highlight");
-            $("#star1").addClass("highlight");
-            $("#star2").addClass("highlight");
-            $("#star3").addClass("highlight");
-            $("#star4").addClass("highlight");
-            $(".hotel-list").hide();
-            newHtml(json,'ratings',5);
+        if( star5 == 0) {
+            if( $(this).val() == 5) {
+                star5 = 1;
+                $("#hotel-name").val('');
+                arrstar.push(5);
+                console.log(arrstar);
+                $("#star5").removeClass("highlight");
+                if( $.inArray(2,arrstar) == -1 ) {
+                    $("#star2").addClass("highlight");
+                }
+                if( $.inArray(3,arrstar) == -1 ) {
+                    $("#star3").addClass("highlight");
+                }
+                if( $.inArray(4,arrstar) == -1 ) {
+                    $("#star4").addClass("highlight");
+                }
+                if( $.inArray(1,arrstar) == -1 ) {
+                    $("#star1").addClass("highlight");
+                }
+                $(".hotel-list").hide();
+                    newHtml(json,'ratings',arrstar);
+            }
+        } else {
+            star5 = 0;
+            if( $.inArray(2,arrstar) == -1
+                && $.inArray(3,arrstar) == -1
+                && $.inArray(4,arrstar) == -1
+                && $.inArray(1,arrstar) == -1) {
+                $("#star1").removeClass("highlight");
+                $("#star2").removeClass("highlight");
+                $("#star3").removeClass("highlight");
+                $("#star4").removeClass("highlight");
+                $("#star5").removeClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 5;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            } else {
+                console.log('not');
+                $("#star5").addClass("highlight");
+                arrstar = $.grep(arrstar, function(a) {
+                    return a != 5;
+                });
+                $(".hotel-list").hide();
+                newHtml(json,'ratings',arrstar);
+            }
         }
     });
 }
 
 //function to combinely filter hotels with different filter options
 function newHtml(json,find,val) {
-    
-    var srate = filterval['rating'];
+    var srate = arrstar.length;
     var grate = filterval['guestrating'];
+    
     var flag = 0; 
     for(var i=0; i < json.length; i++) {
         if( find === 'guestratings') {
-            if( srate !== undefined ) {
-                if ( json[i].guestratings >= val 
-                    && json[i].ratings > srate-1
-                    && json[i].ratings <= srate ) {
-                    htmlString(i);
-                    flag = 1;
-                } 
+            if( srate != 0 ) {
+                if ( json[i].guestratings >= val) {
+                    if( $.inArray(2,arrstar) != -1) {
+                        checkStar(i,2);
+                    }
+                    if( $.inArray(1,arrstar) != -1) {
+                        checkStar(i,1);
+                    }
+                    if( $.inArray(3,arrstar) != -1) {
+                        checkStar(i,3);
+                    }
+                    if( $.inArray(5,arrstar) != -1) {
+                        checkStar(i,5);
+                    }
+                    if( $.inArray(4,arrstar) != -1) {
+                        checkStar(i,4);
+                    }
+                }
             } else {
                 if (json[i].guestratings >= val) {
                     htmlString(i);
@@ -197,19 +392,53 @@ function newHtml(json,find,val) {
         }
         if( find === 'ratings') {
             if( grate !== undefined ) {
-                if ( json[i].guestratings >= grate 
-                    && json[i].ratings > val-1
-                    && json[i].ratings <= val ) {
-                    htmlString(i);
-                    flag =1;
-                } 
+                if ( srate == 0 ) {
+                    if ( json[i].guestratings >= grate ) {
+                        htmlString(i);   
+                        flag =1;
+                    }
+                } else { 
+                    if ( json[i].guestratings >= grate) {
+                        if( $.inArray(2,arrstar) != -1) {
+                            checkStar(i,2);
+                        }
+                        if( $.inArray(1,arrstar) != -1) {
+                            checkStar(i,1);
+                        }
+                        if( $.inArray(3,arrstar) != -1) {
+                            checkStar(i,3);
+                        }
+                        if( $.inArray(5,arrstar) != -1) {
+                            checkStar(i,5);
+                        }
+                        if( $.inArray(4,arrstar) != -1) {
+                            checkStar(i,4);
+                        }
+                    } 
+                }
             } else {
-                if (json[i].ratings > val-1
-                        && json[i].ratings <= val) {
-                    htmlString(i);
-                    flag = 1;
+                if ( srate == 0 ) {
+                    $(".hotel-list").show();
+                    flag = 1;    
+                } else {
+                    if( $.inArray(2,arrstar) != -1) {
+                        checkStar(i,2);
+                    }
+                    if( $.inArray(1,arrstar) != -1) {
+                        checkStar(i,1);
+                    }
+                    if( $.inArray(3,arrstar) != -1) {
+                        checkStar(i,3);
+                    }
+                    if( $.inArray(5,arrstar) != -1) {
+                        checkStar(i,5);
+                    }
+                    if( $.inArray(4,arrstar) != -1) {
+                        checkStar(i,4);
+                    }
                 } 
-            }       
+            } 
+                  
         } 
     } 
     
@@ -226,6 +455,14 @@ function newHtml(json,find,val) {
                 }
             }
         });
+    }
+
+    function checkStar(i,val) {
+        if( json[i].ratings > val-1
+        && json[i].ratings <= val ) {
+            htmlString(i);
+            flag = 1;
+        }
     }
 }
 
