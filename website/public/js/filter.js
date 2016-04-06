@@ -5,8 +5,39 @@ star2 = 0;
 star3 = 0;
 star4 = 0;
 star5 = 0;
+price = 0;
 function filter(json) {
     
+
+    $(function() {
+    $( "#slider" ).slider({
+      value:0,
+      min: 0,
+      max: 500,
+      step: 10,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.value );
+        
+      }
+      // $("#slider-value").html($( "#amount" ).val( "$" + ui.value ));
+    });
+   
+    // price = $("#slider-value").html();
+    // console.log(price);
+     });
+
+
+
+
+
+
+
+
+
+
+
+
+
     //reset all filters   
     $("#reset").on('click', function() {
         arrstar = [];
@@ -468,6 +499,7 @@ function newHtml(json,find,val) {
 
 //function to generate  string after filtering
 function htmlString(i) {
+    console.log('i am');
     var divContent = '<div class="col-md-12 hotel-list">';
         divContent += '<div class="row">';
         divContent += '<div class="col-md-3">';

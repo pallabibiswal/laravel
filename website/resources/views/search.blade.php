@@ -15,6 +15,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"  type="text/javascript"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
 <script src="{{ asset_timed('/js/filter.js') }}"></script>
+<script>
+
+  </script>
 @endsection
 
 @section('content')
@@ -157,6 +160,16 @@
                     <button id="search-hotel" class="btn btn-info">G0..
                     </button></div>
                     </div>
+                <hr/>
+                <hr/>
+                    <p>
+                        <label for="amount">Price:</label>
+                        <input type="text" id="amount" 
+                        readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    </p>
+ 
+                    <div id="slider"></div>
+                    <span id="slider-value"></span>
                 <hr/>
         </div>
         <div><button id="reset" class="btn btn-info">
