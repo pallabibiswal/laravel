@@ -6,51 +6,54 @@ star3 = 0;
 star4 = 0;
 star5 = 0;
 price = 0;
+
+//main function for filtering hotels
 function filter(json) {
     
-
+    //added jquery slider for price filtering
     $(function() {
-    $( "#slider" ).slider({
-      value:0,
-      min: 0,
-      max: 500,
-      step: 10,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
-        
-      }
-      // $("#slider-value").html($( "#amount" ).val( "$" + ui.value ));
+        $( "#slider" ).slider({
+            value: price,
+            min: 0,
+            max: 500,
+            step: 10,
+            slide: function( event, ui ) {
+                $( "#amount" ).val( "$" + ui.value );
+                price = ui.value;
+            },
+            stop: function( event, ui ) {
+                price = ui.value;
+                newHtml(json,'price',price);
+            }
+        });
     });
-   
-    // price = $("#slider-value").html();
-    // console.log(price);
-     });
-
-
-
-
-
-
-
-
-
-
-
-
 
     //reset all filters   
     $("#reset").on('click', function() {
+        //reset global variables
         arrstar = [];
         filterval['guestratings'] = undefined;
+
+        //reset hotel search by name
         $("#hotel-name").val('');
+
+        //reset slider
+        $( "#amount" ).val('');
+        $( "#slider" ).slider( "value", 0 );
+
+        //reset all stars
         $("#star1").removeClass("highlight");
         $("#star2").removeClass("highlight");
         $("#star3").removeClass("highlight");
         $("#star4").removeClass("highlight");
         $("#star5").removeClass("highlight");
+
+        //reset guest ratings
         $("#smile4").removeClass("highlight");
         $("#sad0").removeClass("highlight");
         $("#granny2").removeClass("highlight");
+
+        //showing all hotels after clearing filters
         $(".hotel-list").show();
     });
     
@@ -58,6 +61,8 @@ function filter(json) {
     $('#search-hotel').click(function() {
         arrstar = [];
         filterval['guestratings'] = undefined;
+        $( "#amount" ).val('');
+        $( "#slider" ).slider( "value", 0 );
         $("#star1").removeClass("highlight");
         $("#star2").removeClass("highlight");
         $("#star3").removeClass("highlight");
@@ -69,11 +74,15 @@ function filter(json) {
         var hotelName = $('#hotel-name').val();
         for(var i=0; i < json.length; i++) {
             var hotel = json[i].name;
+            
+            //check if given hotel name matched with list of hotels 
             if (hotel.toUpperCase() === hotelName.toUpperCase()) {
                 var areEqual = true;
                 var c = i;
             } 
         }
+
+        //if matching found then display searched hotel else error
         if(areEqual == true) {
             $(".hotel-list").hide();
             htmlString(c);
@@ -189,7 +198,7 @@ function filter(json) {
                 arrstar.push(2);
                 $("#star2").removeClass("highlight");
                 if( $.inArray(1,arrstar) == -1 ) {
-                    $("#star2").addClass("highlight");
+                    $("#star1").addClass("highlight");
                 }
                 if( $.inArray(3,arrstar) == -1 ) {
                     $("#star3").addClass("highlight");
@@ -204,7 +213,8 @@ function filter(json) {
                     newHtml(json,'ratings',arrstar);
             }
         } else {
-             star2 = 0;
+            star2 = 0;
+            console.log(star2);
             if( $.inArray(1,arrstar) == -1
                 && $.inArray(3,arrstar) == -1
                 && $.inArray(4,arrstar) == -1
@@ -392,29 +402,32 @@ function filter(json) {
 function newHtml(json,find,val) {
     var srate = arrstar.length;
     var grate = filterval['guestrating'];
+    if( find == 'price') {
+        price = val;
+    }
     
     var flag = 0; 
     for(var i=0; i < json.length; i++) {
         if( find === 'guestratings') {
-            if( srate != 0 ) {
+            if( srate != 0 && price == 0) {
                 if ( json[i].guestratings >= val) {
-                    if( $.inArray(2,arrstar) != -1) {
-                        checkStar(i,2);
-                    }
-                    if( $.inArray(1,arrstar) != -1) {
-                        checkStar(i,1);
-                    }
-                    if( $.inArray(3,arrstar) != -1) {
-                        checkStar(i,3);
-                    }
-                    if( $.inArray(5,arrstar) != -1) {
-                        checkStar(i,5);
-                    }
-                    if( $.inArray(4,arrstar) != -1) {
-                        checkStar(i,4);
-                    }
+                    starCheckingConditions(i); 
                 }
-            } else {
+            } 
+            if (srate == 0 && price != 0 ){
+               if ( json[i].guestratings >= val
+               && json[i].price <= price){
+                    htmlString(i);
+                    flag = 1;
+               } 
+            } 
+            if (srate != 0 && price != 0) {
+                if ( json[i].guestratings >= val
+                && json[i].price <= price) {
+                    starCheckingConditions(i); 
+                }    
+            } 
+            if(srate == 0 && price == 0 ) {
                 if (json[i].guestratings >= val) {
                     htmlString(i);
                     flag = 1;
@@ -422,55 +435,92 @@ function newHtml(json,find,val) {
             }
         }
         if( find === 'ratings') {
-            if( grate !== undefined ) {
-                if ( srate == 0 ) {
-                    if ( json[i].guestratings >= grate ) {
-                        htmlString(i);   
-                        flag =1;
+            if(srate != 0) {
+                if( grate != undefined && price == 0) {
+                    if( json[i].guestratings >= grate ) {  
+                        starCheckingConditions(i); 
+                    }    
+                } 
+                if (grate == undefined && price != 0 ){
+                    if (json[i].price <= price) {
+                        starCheckingConditions(i); 
                     }
-                } else { 
-                    if ( json[i].guestratings >= grate) {
-                        if( $.inArray(2,arrstar) != -1) {
-                            checkStar(i,2);
-                        }
-                        if( $.inArray(1,arrstar) != -1) {
-                            checkStar(i,1);
-                        }
-                        if( $.inArray(3,arrstar) != -1) {
-                            checkStar(i,3);
-                        }
-                        if( $.inArray(5,arrstar) != -1) {
-                            checkStar(i,5);
-                        }
-                        if( $.inArray(4,arrstar) != -1) {
-                            checkStar(i,4);
-                        }
-                    } 
-                }
-            } else {
-                if ( srate == 0 ) {
-                    $(".hotel-list").show();
-                    flag = 1;    
-                } else {
-                    if( $.inArray(2,arrstar) != -1) {
-                        checkStar(i,2);
+                   
+                } 
+                if (grate != undefined && price != 0) {
+                    if(json[i].guestratings >= grate
+                        && json[i].price <= price) {
+                        starCheckingConditions(i); 
                     }
-                    if( $.inArray(1,arrstar) != -1) {
-                        checkStar(i,1);
-                    }
-                    if( $.inArray(3,arrstar) != -1) {
-                        checkStar(i,3);
-                    }
-                    if( $.inArray(5,arrstar) != -1) {
-                        checkStar(i,5);
-                    }
-                    if( $.inArray(4,arrstar) != -1) {
-                        checkStar(i,4);
-                    }
+                    
+                } 
+                if(grate == undefined && price == 0 ) { 
+                   starCheckingConditions(i); 
                 } 
             } 
-                  
+            if (srate == 0 ) {
+                if( grate != undefined && price == 0) {
+                    if( json[i].guestratings >= grate ) {  
+                        htmlString(i); 
+                        flag = 1;
+                    }    
+                } 
+                if (grate == undefined && price != 0 ){
+                    if (json[i].price <= price) {
+                       htmlString(i); 
+                       flag = 1;
+                    }
+                   
+                } 
+                if (grate != undefined && price != 0) {
+                    if(json[i].guestratings >= grate
+                        && json[i].price <= price) {
+                        htmlString(i);
+                        flag = 1; 
+                    }
+                    
+                } 
+                if(grate == undefined && price == 0 ) { 
+                   $(".hotel-list").show(); 
+                   flag = 1;
+                } 
+            }    
         } 
+    }
+    if( find === 'price') {
+        $(".hotel-list").hide();
+        price = val;
+        console.log('star'+srate);
+        console.log('guest'+grate);
+        for(var i=0; i < json.length; i++) {
+            if( srate !== 0 && grate !== 0 ) {
+                if( json[i].price <= price ) {
+                    if( json[i].guestratings >= grate ) {
+                        starCheckingConditions(i); 
+                    }
+                }
+            } 
+            if( grate == undefined
+                && srate == 0
+                && json[i].price <= price) {
+                htmlString(i);
+                flag=1;
+            }
+            if(srate !== 0 && grate == undefined){
+                if( json[i].price <= price ) {
+                    starCheckingConditions(i);    
+                }
+            }
+            if( grate !== undefined && srate == 0) {
+                if( json[i].price <= price
+                    && json[i].guestratings >= grate ) {
+                    htmlString(i);
+                    flag=1;
+                }
+            }
+            
+        }
+
     } 
     
     //to print error message if result not found
@@ -488,6 +538,7 @@ function newHtml(json,find,val) {
         });
     }
 
+    //function to display hotels according to the stars
     function checkStar(i,val) {
         if( json[i].ratings > val-1
         && json[i].ratings <= val ) {
@@ -495,11 +546,30 @@ function newHtml(json,find,val) {
             flag = 1;
         }
     }
+
+    //function to check stars in the array
+    function starCheckingConditions(i) {
+        if( $.inArray(2,arrstar) != -1) {
+            checkStar(i,2);
+        }
+        if( $.inArray(1,arrstar) != -1) {
+            checkStar(i,1);
+        }
+        if( $.inArray(3,arrstar) != -1) {
+            checkStar(i,3);
+        }
+        if( $.inArray(5,arrstar) != -1) {
+            checkStar(i,5);
+        }
+        if( $.inArray(4,arrstar) != -1) {
+            checkStar(i,4);
+        }     
+    }
 }
 
 //function to generate  string after filtering
 function htmlString(i) {
-    console.log('i am');
+    
     var divContent = '<div class="col-md-12 hotel-list">';
         divContent += '<div class="row">';
         divContent += '<div class="col-md-3">';
