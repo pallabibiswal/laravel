@@ -151,6 +151,21 @@
                     <img class="ft-emo-sm" hspace="15" 
                      src="/img/smiley-face.jpg"></button>
                 <hr/>
+
+                <hr/>
+                    <div class="ft-options">Top Options: </div>
+                    <span id="wifi">
+                    <img class="ft-wifi" hspace="10" src="/img/wifi.png"></span>
+                    <span id="spa">
+                    <img class="ft-spa" hspace="10" src="/img/spa.png"></span>
+                    <span id="beach">
+                    <img class="ft-beach" hspace="10" src="/img/Beach-512.png"></span>
+                    <span id="breakfast">
+                    <img class="ft-breakfast" hspace="10" src="/img/breakfast.png"></span>
+                    <span id="pool">
+                    <img class="ft-pool" hspace="10" src="/img/pool.png"></span>
+                <hr/>
+
                 <hr/>
                     <div class="ft-ratings">Search Hotel Names: </div>
                     <div class="row">
@@ -164,8 +179,7 @@
                 <hr/>
                     <p>
                         <label for="amount">Price:</label>
-                        <input type="text" id="amount" 
-                        readonly style="border:0; color:#f6931f; font-weight:bold;">
+                        <input type="text" id="amount">
                     </p>
  
                     <div id="slider"></div>
