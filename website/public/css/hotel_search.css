@@ -192,3 +192,18 @@ border-left-width: 15px;
     margin-left: 80px;
     margin-bottom: 10px;
 }
+#amount{
+    border:0; 
+    color:#f6931f; 
+    font-weight:bold;
+}
+.ft-wifi,
+.ft-spa,
+.ft-beach,
+.ft-breakfast,
+.ft-pool{
+    width: 10%;
+    height: auto;
+    cursor:pointer;
+}
+
