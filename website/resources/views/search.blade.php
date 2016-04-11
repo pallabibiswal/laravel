@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
+<!--css section-->
 @section('css')
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/ui-darkness/jquery-ui.css" />
 @endsection
 
+<!--javascript section-->
 @section('script')
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
@@ -15,9 +17,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"  type="text/javascript"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
 <script src="{{ asset_timed('/js/filter.js') }}"></script>
-<script>
-
-  </script>
 @endsection
 
 @section('content')
@@ -90,6 +89,7 @@
     var data = '<?php if(isset($data)){ echo addslashes(json_encode($data)); }?>';
         if (data !== undefined ) {
             json = $.parseJSON(data);
+            console.log(json);
             filter(json);
         }
     });
@@ -156,10 +156,6 @@
                     <div class="ft-options">Top Options: </div>
                     <span id="wifi">
                     <img class="ft-wifi" hspace="10" src="/img/wifi.png"></span>
-                    <span id="spa">
-                    <img class="ft-spa" hspace="10" src="/img/spa.png"></span>
-                    <span id="beach">
-                    <img class="ft-beach" hspace="10" src="/img/Beach-512.png"></span>
                     <span id="breakfast">
                     <img class="ft-breakfast" hspace="10" src="/img/breakfast.png"></span>
                     <span id="pool">
@@ -222,7 +218,7 @@
 <!--To display error message when result not found-->
 <div id="error"><h4>Sorry...No Result Found..!</h4></div>
 
-<!--Display hotels-->
+<!--Display hotel list-->
 @for ($i = 0; $i < $total['count']; $i++)
     <div class="col-md-12 hotel-list">
         <div class="row">
