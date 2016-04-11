@@ -22,6 +22,7 @@ function hotelMap(lat,lng,data) {
                 $(this).dialog('close');
             }
         },
+        //method to open the dialog box with map
         open: function () {
             var mapOptions = {
                 center: new google.maps.LatLng(lat, lng),

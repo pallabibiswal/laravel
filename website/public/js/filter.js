@@ -1,3 +1,4 @@
+//declaring global variables
 filterval = [];
 arrstar = [];
 star1 = 0;
@@ -396,6 +397,54 @@ function filter(json) {
             }
         }
     });
+    
+    //filter with wifi availability
+    $("#wifi").on('click', function() {
+        $(".hotel-list").hide();
+        for(var i=0; i < json.length; i++) {
+            if (typeof json[i].amenity !== 'undefined' && json[i].amenity.length > 0) {
+                for(var j=0; j < json[i].amenity.length; j++) {
+                    var n = json[i].amenity[j].indexOf("Internet");
+                    if ( n !== -1 ) {
+                        htmlString(i);
+                        console.log('hotel:'+json[i].name);
+                    }
+                }
+            } 
+        } 
+    });
+
+    //filter with breakfast availability
+    $("#breakfast").on('click', function() {
+        $(".hotel-list").hide();
+        for(var i=0; i < json.length; i++) {
+            if (typeof json[i].amenity !== 'undefined' && json[i].amenity.length > 0) {
+                for(var j=0; j < json[i].amenity.length; j++) {
+                    var n = json[i].amenity[j].indexOf("breakfast");
+                    if ( n !== -1 ) {
+                        htmlString(i);
+                        console.log('hotel:'+json[i].name);
+                    }
+                }
+            } 
+        } 
+    });
+
+    //filter with pool availability
+    $("#pool").on('click', function() {
+        $(".hotel-list").hide();
+        for(var i=0; i < json.length; i++) {
+            if (typeof json[i].amenity !== 'undefined' && json[i].amenity.length > 0) {
+                for(var j=0; j < json[i].amenity.length; j++) {
+                    var n = json[i].amenity[j].indexOf("pool");
+                    if ( n !== -1 ) {
+                        htmlString(i);
+                        console.log('hotel:'+json[i].name);
+                    }
+                }
+            } 
+        } 
+    });
 }
 
 //function to combinely filter hotels with different filter options
@@ -406,8 +455,11 @@ function newHtml(json,find,val) {
         price = val;
     }
     
+    //flag to know whether result is found or not
     var flag = 0; 
     for(var i=0; i < json.length; i++) {
+
+        //when the filter is done by guestratings
         if( find === 'guestratings') {
             if( srate != 0 && price == 0) {
                 if ( json[i].guestratings >= val) {
@@ -434,6 +486,8 @@ function newHtml(json,find,val) {
                 } 
             }
         }
+
+        //when the filter is done by star ratings
         if( find === 'ratings') {
             if(srate != 0) {
                 if( grate != undefined && price == 0) {
@@ -487,6 +541,8 @@ function newHtml(json,find,val) {
             }    
         } 
     }
+
+    //when the filter is done by price
     if( find === 'price') {
         $(".hotel-list").hide();
         price = val;
