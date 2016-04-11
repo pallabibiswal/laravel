@@ -31,7 +31,7 @@ class SearchController extends Controller
         //call helper method to get latitude and longitude of the location
         $lanlog = get_latlng($request->input('search'));
         
-        //store search location
+        //store details of search location
         $detail['city']      = $request->input('search');
         $detail['checkin']  = date("Y-m-d", strtotime($request->input('checkin')));
         $detail['checkout'] = date("Y-m-d", strtotime($request->input('checkout')));
@@ -39,13 +39,13 @@ class SearchController extends Controller
         $js['in'] = $detail['checkin'];
         $js['out'] = $detail['checkout'];
 
-        $today = date("Y/m/d");
+        $today = date("Y-m-d");
 
         //validating with current dates
         if (strtotime($detail['checkin'])<strtotime($today)
             || strtotime($detail['checkout'])<=strtotime($today)) {
             \Session::flash('status','Please provide correct Date.');
-            return redirect('/');
+            return redirect('/search');
         }
 
         //called a method to get url contents
@@ -53,6 +53,7 @@ class SearchController extends Controller
             .$lanlog['lat'].','.$lanlog['lng'].'&checkInDate='.$detail['checkin'].
             '&checkOutDate='.$detail['checkout'].
             '&radius=5km&apikey=6z3rxiRROPeMug17Ll2eVLX2m6DGtlkc');
+
         
         //store total no. of hotels
         $total['count'] = $jsonData['HotelCount'];
@@ -60,8 +61,7 @@ class SearchController extends Controller
         //to display according to the date picker format
         $detail['checkin']  = $request->input('checkin');
         $detail['checkout'] = $request->input('checkout');
-
-
+        $k = 0;
         //store required details into an array
         for ($i=0; $i < $total['count']; $i++ ) {
             $data[$i]['lat']  = $jsonData['HotelInfoList']['HotelInfo'][$i]['Location']['GeoLocation']['Latitude'];    
@@ -90,8 +90,13 @@ class SearchController extends Controller
             if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'])) {
             $data[$i]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
             }
+            if (isset($jsonData['HotelInfoList']['HotelInfo'][$i]['AmenityList']['Amenity'])) {
+                $cc = count($jsonData['HotelInfoList']['HotelInfo'][$i]['AmenityList']['Amenity']);
+                for($l=0;$l<$cc;$l++) {
+                $data[$i]['amenity'][$l] = $jsonData['HotelInfoList']['HotelInfo'][$i]['AmenityList']['Amenity'][$l];
+                }
+            }
         }
-    
         //return array to search view to display data
         return view('search',compact('data','total','detail','lanlog','js'));
     }
@@ -147,7 +152,8 @@ class SearchController extends Controller
             $dat[$i]['detailsurl'] = $jsonData['HotelInfoList']['HotelInfo'][$i]['DetailsUrl'];
             }
         }        
-          
+        
+        //sending responce to ajax success  
         $data = json_encode($dat);
         echo $data;
     }
